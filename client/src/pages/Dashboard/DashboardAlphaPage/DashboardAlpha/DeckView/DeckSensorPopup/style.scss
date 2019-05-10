@@ -1,0 +1,118 @@
+@import '../../../../../../resources/mixins';
+
+.DeckSensorPopup {
+  position: absolute;
+  width: 20%;
+  height: 100%;
+  overflow-y: auto;
+  display: block;
+  border: solid 2px #00efff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 1px #0274ff, inset 0 0 20px rgb(2,116,255);
+  background: linear-gradient(180deg,rgba(4,24,48,0.95) 0%,rgba(4,24,48,1) 100%);
+  z-index: 100;
+  .caption {
+    width: 100%;
+    color: #00efff;
+    font-size: 24px;
+    font-weight: bolder;
+    text-decoration: underline;
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    cursor: default;
+  }
+  .option {
+    width: 100%;
+    color: #00efff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    cursor: pointer;
+  }
+  .option:hover {
+    color: #ED3435;
+  }
+  ul.popupArea {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    z-index: 0;
+    > li {
+      .dropdownItem {
+        cursor: pointer;
+        display: block;
+        font-size: 18px;
+        color: rgba(0,237,255,1);
+        position: relative;
+        transition: all 0.4s ease-out;
+        margin-left: 18%;
+        .subTitle {
+          margin-left: 16px;
+        }
+        i {
+          position: absolute;
+          top: 7px;
+          left: 0;
+        }
+        .fa-caret-right {
+          left: 0;
+          right: auto;
+        }
+      }
+      ul {
+        list-style: none;
+      }
+      ul.submenuItems {
+        padding: 0;
+        display: none;
+        li {
+          text-align: center;
+          .listItem {
+            color: rgba(0,237,255,1);
+          }
+          .functionItem {
+            font-size: 14px;
+            cursor: pointer;
+          }
+          .functionItem:hover {
+            color: #ED3435;
+          }
+          .subCaption {
+            font-size: 17px;
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+}
+.DeckSensorPopup::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.DeckSensorPopup::-webkit-scrollbar
+{
+  width: 6px;
+  background-color: rgba(0,0,0,0);
+  padding-top: 20px;
+}
+
+.DeckSensorPopup::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: rgba(0,237,255,1);
+}
+
+
+
+
+
+

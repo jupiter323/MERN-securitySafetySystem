@@ -1,0 +1,146 @@
+@import '../../../../resources/mixins';
+
+.DeckViewContainer {
+  z-index: 100;
+}
+.DataCard {
+  padding: 0% 0%;
+  margin-bottom: rem(35);
+  position: relative;
+  background: $white;
+  //overflow: hidden;
+  border: solid 2px #00efff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 1px #0274ff, inset 0 0 20px rgb(2,116,255);
+}
+
+.green {
+  border: solid 2px #00ff91;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 1px rgba(2,255,247,0.66), inset 0 0 20px rgba(2,255,247,0.66);
+}
+.closeButton {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.1rem;
+  width: 2rem;
+  height: 2rem;
+  display: block;
+  background:transparent;
+  border: none;//2px solid rgba(0,237,255,1);
+  border-radius: 1rem;
+  cursor:pointer;
+  outline: none;
+  //border: none;
+  transition:
+    box-shadow 200ms ease-out,
+    transform 200ms ease-out,
+    opacity 200ms ease-in-out;
+
+  &:after,
+  &:before{
+    transition: 400ms linear;
+  }
+  &:after{
+    width:24px;
+    height:2px;
+    background-color:rgba(0,237,255,1);
+    content:"";
+    left:50%;
+    top:50%;
+    margin-left:-12px;
+    margin-top:-2px;
+    position:absolute;
+    transform: rotate(-45deg);
+    /*@include transform-origin(100%,100%);*/
+  }
+  &:before{
+    left:50%;
+    top:50%;
+    margin-left:-12px;
+    margin-top:-2px;
+    width:24px;
+    height:2px;
+    background-color:rgba(0,237,255,1);
+    content:"";
+    position:absolute;
+    transform: rotate(45deg);
+  }
+  & + p{
+    text-transform:lowercase;
+    font-size:14px;
+    margin-bottom:10px;
+  }
+}
+
+.closeButton:hover:not(.fadeOut){
+  box-shadow: 0px 0px 0px 20px rgba(0,237,255,1) inset;
+  transform: scale(0.8);
+  &:after{
+    background-color: rgba(0,237,255,1);
+    transform: rotate(-45deg) scale(0.6);
+  }
+  &:before{
+    background-color: rgba(0,237,255,1);
+    transform: rotate(45deg) scale(0.6);
+  }
+}
+
+.react-grid-layout {
+  position: relative;
+  transition: height 200ms ease;
+}
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+  &:hover {
+    .closeButton {
+      display: block;
+    }
+  }
+}
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+.react-grid-item.resizing {
+  z-index: 1;
+  will-change: width, height;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  will-change: transform;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: red;
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+}

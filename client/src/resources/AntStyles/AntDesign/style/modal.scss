@@ -1,0 +1,41 @@
+// Import mixins from "core" module
+@import '../../../mixins';
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/*  ANT DESIGN MODAL */
+
+.ant-modal {
+  display: inline-block;
+  vertical-align: middle;
+  top: 0;
+  text-align: left;
+}
+
+.ant-modal-body {
+  padding: 0;
+}
+
+.ant-modal-close {
+  outline: none !important;
+}
+
+.ant-modal-mask {
+  background: rgba(#0f0c29, .5);
+}
+
+
+.ant-modal-centered {
+  text-align: center;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    width: 0;
+  }
+
+  .ant-modal-body {
+    padding: 20px;
+  }
+}

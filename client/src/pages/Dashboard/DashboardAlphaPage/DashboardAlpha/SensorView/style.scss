@@ -1,0 +1,59 @@
+@import '../../../../../resources/mixins';
+
+.SensorViewController {
+  border: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(30,30,30,0);
+  border-radius: 10px;
+  overflow: hidden;
+  .movableArea {
+    width: 100%;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0);
+    border-top: 10px;
+  }
+  :hover {
+    background: rgba(30,30,30,10);
+    cursor: move;
+  }
+  .webgl-content {
+    #gameContainer {
+      width: 426px;
+      height: 490px;
+    }
+  }
+  .borderImage {
+    border: none;
+    position: absolute;
+    background: rgba(255,255,255,0);
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .cornerImage {
+    border: none;
+    position: absolute;
+    background: rgba(255,255,255,0);
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+  }
+}
+
+
+
+
+

@@ -1,0 +1,40 @@
+.rate {
+  align-items: center;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.info-button {
+  padding: 0px;
+  margin: 0px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #000000;
+  background-color: #ffffff;
+  border: none;
+  box-shadow: 0 9px #999;
+  &:hover {
+    background-color: #3e8e41
+  }
+  &:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+  //start click effect
+  &:before {
+    content: '';
+    background-color: aliceblue;
+    border-radius: 0%;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: scale(0.001, 0.001);
+  }
+
+}

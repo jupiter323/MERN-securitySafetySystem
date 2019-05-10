@@ -1,0 +1,98 @@
+[
+  {
+    "date": "10/06/2018",
+    "time": "02:41:17 PM",
+    "operator": "John",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/06/2018",
+    "time": "10:17:06 AM",
+    "operator": "Rich",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/06/2018",
+    "time": "06:35:02 AM",
+    "operator": "Robert",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/06/2018",
+    "time": "02:15:59 AM",
+    "operator": "James",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/06/2018",
+    "time": "12:16:33 PM",
+    "operator": "Peter",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/05/2018",
+    "time": "11:42:12 PM",
+    "operator": "Robert",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/05/2018",
+    "time": "10:07:07 PM",
+    "operator": "Paul",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/05/2018",
+    "time": "09:08:22 PM",
+    "operator": "John",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/05/2018",
+    "time": "08:28:29 PM",
+    "operator": "Jordan",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/04/2018",
+    "time": "02:32:45 PM",
+    "operator": "Jane",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/04/2018",
+    "time": "7:32:14 AM",
+    "operator": "Richard",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/04/2018",
+    "time": "09:24:52 AM",
+    "operator": "Roman",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/04/2018",
+    "time": "04:46:59 AM",
+    "operator": "Jany",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/04/2018",
+    "time": "7:23:33 PM",
+    "operator": "Tom",
+    "access": "DECLINED"
+  },
+  {
+    "date": "10/03/2018",
+    "time": "05:36:12 PM",
+    "operator": "Charles",
+    "access": "GRANTED"
+  },
+  {
+    "date": "10/03/2018",
+    "time": "03:24:07 PM",
+    "operator": "Robin",
+    "access": "DECLINED"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "example",
+    "host": "localhost",
+    "dialect": "sqlite",
+    "storage": "../SSS/PTechSecurityServer/Database/SecurityEventsDB.db"
+  },
+  "test": {
+    "username": "",
+    "password": null,
+    "database": "",
+    "host": "localhost",
+    "dialect": "sqlite",
+    "storage": "../SSS/PTechSecurityServer/Database/SecurityEventsDB.db"
+  },
+  "production": {
+    "username": "",
+    "password": null,
+    "database": "",
+    "host": "localhost",
+    "dialect": "sqlite",
+    "storage": "../SSS/PTechSecurityServer/Database/SecurityEventsDB.db"
+  }
+}

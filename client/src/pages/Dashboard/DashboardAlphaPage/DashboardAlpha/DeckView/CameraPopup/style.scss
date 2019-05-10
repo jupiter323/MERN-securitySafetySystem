@@ -1,0 +1,42 @@
+@import '../../../../../../resources/mixins';
+
+.CameraPopup {
+  position: absolute;
+  width: 15%;
+  height: 60%;
+  display: block;
+  border: solid 2px #00efff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 1px #0274ff, inset 0 0 20px rgb(2,116,255);
+  background: linear-gradient(180deg,rgba(4,24,48,0.9) 0%,rgba(4,24,48,0.95) 100%);
+  z-index: 100;
+  .caption {
+    width: 100%;
+    color: #00efff;
+    font-size: 18px;
+    font-weight: bolder;
+    text-decoration: underline;
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    cursor: default;
+  }
+  .option {
+    width: 100%;
+    color: #00efff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    cursor: pointer;
+  }
+  .option:hover {
+    color: #ED3435;
+  }
+}
+
+
+
+
+
+
