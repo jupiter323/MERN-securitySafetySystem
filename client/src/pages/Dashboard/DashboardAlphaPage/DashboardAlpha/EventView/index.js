@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getAllSecurityEvents, updateEventLogs } from 'ducks/event'
+import { message } from 'antd'
 import $ from 'jquery'
 import './style.scss'
 
@@ -8,6 +9,8 @@ let scroll_flag = true
 let update_flag = true
 let eventRow_count = 50
 let init_flag = false
+let scroll_start = false;
+let cur_pos = 0;
 
 const mapStateToProps = (state, props) => ({
   urls: state.urls,
@@ -39,7 +42,10 @@ class EventView extends React.Component {
   componentDidMount() {
     //this.initTable();
     let { dispatch } = this.props
-    getAllSecurityEvents(dispatch, 'datetime', 0);
+    getAllSecurityEvents(dispatch, 'datetime', 0)
+      // $('#eventTableContainer').find('.tableArea').mousedown(() => {
+      //     this.handleMouseDown()
+      // });
   }
 
   componentDidUpdate() {
@@ -60,6 +66,26 @@ class EventView extends React.Component {
     })
     getAllSecurityEvents(dispatch, 'datetime', 0)
   }
+
+    handleMouseDown = (e) => {
+        e.stopPropagation();
+        console.log("handleMouseDown: ", e.pageY);
+        scroll_start = true;
+        cur_pos = e.pageY;
+    }
+
+    handleMouseDrag = (e) => {
+      if(scroll_start) {
+        let temp_pos = e.pageY;
+        let cur_scroll = $('#eventTableContainer').scrollTop();
+        $('#eventTableContainer').scrollTop(cur_scroll - temp_pos + cur_pos);
+        cur_pos = temp_pos;
+      }
+    }
+
+    handleMouseUp = (e) => {
+      scroll_start = false;
+    }
 
   updateLatest = (latestLogs, latest_time) => {
     let { sortType, sortOrder } = this.state
@@ -83,12 +109,12 @@ class EventView extends React.Component {
         if (type_temp.includes('GRANTED') || type_temp.includes('GRANTED.')) {
           row.type = 'green'
         } else if (
-            type_temp.includes('SENSOR') ||
-            type_temp.includes('DETECTED') ||
-            type_temp.includes('MOTION') ||
-            type_temp.includes('DENIED') ||
-            type_temp.includes('DRONE') ||
-            type_temp.includes('DENIED.')
+          type_temp.includes('SENSOR') ||
+          type_temp.includes('DETECTED') ||
+          type_temp.includes('MOTION') ||
+          type_temp.includes('DENIED') ||
+          type_temp.includes('DRONE') ||
+          type_temp.includes('DENIED.')
         ) {
           row.type = 'red'
         } else {
@@ -133,12 +159,12 @@ class EventView extends React.Component {
         if (type_temp.includes('GRANTED') || type_temp.includes('GRANTED.')) {
           row.type = 'green'
         } else if (
-            type_temp.includes('SENSOR') ||
-            type_temp.includes('DETECTED') ||
-            type_temp.includes('MOTION') ||
-            type_temp.includes('DENIED') ||
-            type_temp.includes('DRONE') ||
-            type_temp.includes('DENIED.')
+          type_temp.includes('SENSOR') ||
+          type_temp.includes('DETECTED') ||
+          type_temp.includes('MOTION') ||
+          type_temp.includes('DENIED') ||
+          type_temp.includes('DRONE') ||
+          type_temp.includes('DENIED.')
         ) {
           row.type = 'red'
         } else {
@@ -222,6 +248,10 @@ class EventView extends React.Component {
       if (typeof eventArray !== 'undefined' && eventArray.length > 0) {
         count = eventRow_count + 50 > eventArray.length ? eventArray.length : eventRow_count + 50
         cur_eventArray = eventArray.slice(eventRow_count, count)
+        if(eventRow_count >= count) {
+          message.warning("Load all event view data.");
+          return;
+        }
         eventRow_count = count > 0 ? count : eventRow_count
       }
       cur_eventArray.forEach(event => {
@@ -343,7 +373,11 @@ class EventView extends React.Component {
     }
 
     return (
-      <div className="EventLogView">
+      <div
+          className="EventLogView"
+          onMouseMove={this.handleMouseDrag}
+          onMouseUp={this.handleMouseUp}
+      >
         <div className={'captionArea'}>EVENT LOG</div>
         <div className={'sortArea'}>
           <div
@@ -414,7 +448,12 @@ class EventView extends React.Component {
           <div className={'col-3 headerItem'}>DEVICE</div>
         </div>
         <div className={'mainContainer'} id={'eventTableContainer'} onScroll={this.handleScroll}>
-          <div className={'tableArea'} />
+          <div
+              className={'tableArea'}
+              onMouseDown={this.handleMouseDown}
+              // onMouseMove={this.handleMouseDrag}
+              // onMouseUp={this.handleMouseUp}
+          />
         </div>
         <img src={cornerImage} className="cornerImage" alt="corner" />
       </div>
