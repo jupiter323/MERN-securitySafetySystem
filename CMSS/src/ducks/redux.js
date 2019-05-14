@@ -1,8 +1,7 @@
 require('dotenv').config()
 const rootReducer = {
-  serverUrl: process.env.ENV === 'development' ? 'http://localhost:9001' : 'http://192.168.1.102:9001',
-  adaptorServerUrl: process.env.ENV === 'development' ? 'http://localhost:9003' : 'http://192.168.1.102:9003',
-  socketUrl: process.env.ENV === 'development' ? 'ws://localhost:1234' : 'ws://192.168.1.102:1234',
+  serverUrl: process.env.REACT_APP_ENV === 'development' ? `http://localhost:${process.env.REACT_APP_PORT_SERVER}` : process.env.REACT_APP_ROUTE_SERVER,
+  adaptorServerUrl: process.env.REACT_APP_ENV === 'development' ? `http://localhost:${process.env.REACT_APP_PORT_SERVER_ADAPTOR}` : process.env.REACT_APP_ROUTE_SERVER_ADAPTOR,
+  socketUrl: process.env.REACT_APP_ENV === 'development' ? `ws://localhost:${process.env.REACT_APP_PORT_SOCKET}` : process.env.REACT_APP_ROUTE_SOCKET
 }
-
 export default rootReducer
