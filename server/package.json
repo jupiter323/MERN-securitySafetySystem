@@ -97,6 +97,7 @@
       "version": "1.8.1"
     },
     "express": "^4.16.4",
+    "express-graphql": "^0.8.0",
     "finalhandler": {
       "integrity": "sha512-Y1GUDo39ez4aHAw7MysnUD5JzYX+WaIj8I57kO3aEPT1fFRL4sr7mjei97FgnwhAyyzRYmQZaTHb2+9uZ1dPtg==",
       "requires": {
@@ -121,6 +122,7 @@
       "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz",
       "version": "0.5.2"
     },
+    "graphql": "^14.3.0",
     "http": "0.0.0",
     "http-errors": {
       "integrity": "sha1-i1VoC7S+KDoLW/TqLjhYC+HZMg0=",
@@ -296,7 +298,7 @@
       "resolved": "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.1.0.tgz",
       "version": "1.1.0"
     },
-    "sqlite3": "^4.0.8",
+    "sqlite3": "^4.0.6",
     "statuses": {
       "integrity": "sha512-zhSCtt8v2NDrRlPQpCNtw/heZLtfUDqxBM1udqikb/Hbk52LK4nQSwr10u77iopCW5LsyHpuXS0GnEc48mLeew==",
       "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.4.0.tgz",

@@ -8,6 +8,26 @@ import cookie from 'react-cookie'
 import './style.scss'
 import { message } from 'antd'
 
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import _ from "lodash"
+
+export const getDeckZoneSensor = (deckNum) => gql`
+  query getDeckZoneSensor {
+    DeckZones(deckNum:${deckNum}) {
+      DeckZoneName 
+      DeckLocations {      
+        SecurityDevices {       
+          Equipments(EquipmentTypeName:"Deck Sensor") {
+            EquipmentTypeName
+          }
+        }
+      }
+    }
+  }
+`;
+
+
 let socketUrl = rootReducer.socketUrl
 
 const mapStateToProps = (state, props) => ({
@@ -223,15 +243,21 @@ class DeckSensorPopup extends React.Component {
       this.ws.send(messageInfo)
     }
   }
-
+  includeDecksensor = (DeckLocations) => {
+    const equipmenttypename = "Deck Sensor"
+    for (let e of DeckLocations)
+      for (let ee of e['SecurityDevices'])
+        for (let eee of ee['Equipments'])
+          if (eee['EquipmentTypeName'] === equipmenttypename) return true
+  }
   render() {
     let { displayInfo, deckZonesInfo, currentDeck } = this.props
     let { display, left, top } = displayInfo
     let { expandedList } = this.state
     let curDeckNumber = currentDeck.DeckNumber
-    let deckZones = deckZonesInfo.deckZones.filter(zone => {
-      return zone.DeckNumber === curDeckNumber
-    })
+    // let deckZones = deckZonesInfo.deckZones.filter(zone => {
+    //   return zone.DeckNumber === curDeckNumber
+    // })
     let deckView = $('#DeckViewController')
     let absolute_top =
       typeof deckView.parents()[1] !== 'undefined' ? $(deckView.parents()[1]).position().top : 0
@@ -282,7 +308,36 @@ class DeckSensorPopup extends React.Component {
               />
               <span className={'subTitle'}>{'BY ZONE'}</span>
             </div>
-            <ul
+            <Query query={getDeckZoneSensor(curDeckNumber)}>
+              {({ loading, data }) => !loading && (
+                <ul
+                  className="submenuItems"
+                  style={expandedList.includes(1) ? { display: 'block' } : { display: 'none' }}
+                >
+                  {_.filter(data.DeckZones, e => this.includeDecksensor(e.DeckLocations)).map(deckZone => {
+                    if (deckZone.DeckZoneName === 'No Zone') return <div />
+                    return (
+                      <li key={deckZone.DeckZoneName}>
+                        <div className={'listItem subCaption'}>{deckZone.DeckZoneName}</div>
+                        <div
+                          className={'listItem functionItem'}
+                          onClick={this.deckSensorByZone.bind(this, deckZone, 0)}
+                        >
+                          {'ON'}
+                        </div>
+                        <div
+                          className={'listItem functionItem'}
+                          onClick={this.deckSensorByZone.bind(this, deckZone, 1)}
+                        >
+                          {'OFF'}
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </Query>
+            {/* <ul
               className="submenuItems"
               style={expandedList.includes(1) ? { display: 'block' } : { display: 'none' }}
             >
@@ -306,7 +361,7 @@ class DeckSensorPopup extends React.Component {
                   </li>
                 )
               })}
-            </ul>
+            </ul> */}
           </li>
         </ul>
       </div>

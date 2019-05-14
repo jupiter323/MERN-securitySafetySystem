@@ -22,7 +22,9 @@ import 'resources/CleanStyles/Core/core.cleanui.scss'
 import 'resources/CleanStyles/Vendors/vendors.cleanui.scss'
 
 import App from 'app.js';
-
+// for apollo - graphql
+import { ApolloProvider } from 'react-apollo';
+import client from './apollo';
 
 const history = createHistory()
 const router = routerMiddleware(history)
@@ -34,9 +36,11 @@ if (isLogger && process.env.NODE_ENV === 'development') {
 }
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(...middlewares)))
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+  <Provider store={store}>
+    <ApolloProvider client={client}>     
+      <App />
+    </ApolloProvider>
+  </Provider>,
   document.getElementById('root'),
 );
 registerServiceWorker();

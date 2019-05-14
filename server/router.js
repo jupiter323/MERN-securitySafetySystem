@@ -8,13 +8,14 @@ const SecurityEventsController = require('./controllers/securityEvents');
 const DeviceAttributesController = require('./controllers/deviceAttributes');
 const DeckZonesController = require('./controllers/deckZones');
 const AuxiliaryDevicesController = require('./controllers/auxDevicesController');
-
+const GraphQlController =  require('./controllers/GraphQlController');
 const express = require('express');
 
 module.exports = function (app) {
     // Initializing route groups
     //console.log("starting now...");
     const apiRoutes = express.Router(),
+        graphRoutes = express.Router(),
         authRoutes = express.Router(),
         decksRoutes = express.Router(),
         usersRoutes = express.Router(),
@@ -27,6 +28,11 @@ module.exports = function (app) {
         deckZonesRoutes = express.Router(),
         auxDevicesRoutes = express.Router();
 
+
+    //= ========================
+    // User Routes
+    //= ========================
+    graphRoutes.use('/', GraphQlController.getGraphQl);
 
     //= ========================
     // User Routes
@@ -147,6 +153,8 @@ module.exports = function (app) {
     //Get All SecurityEvents
     deckZonesRoutes.get('/all', DeckZonesController.getAllDeckZones);
 
+    deckZonesRoutes.get('/location/secdevices/senors', DeckZonesController.getAllDeckSensorsZones)
+
     //= ========================
     // Auxiliary Devices Routes
     //= ========================
@@ -156,5 +164,6 @@ module.exports = function (app) {
     auxDevicesRoutes.get('/all', AuxiliaryDevicesController.getAllAuxiliaryDevcies);
 
     app.use('/api', apiRoutes);
+    app.use('/graphql', graphRoutes);
 
 };
