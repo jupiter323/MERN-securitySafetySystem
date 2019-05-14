@@ -12,7 +12,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import _ from "lodash"
 
-export const getDeckZoneSensor = (deckNum) => gql`
+const getDeckZoneSensor = (deckNum) => gql`
   query getDeckZoneSensor {
     DeckZones(deckNum:${deckNum}) {
       DeckZoneName 
@@ -26,6 +26,7 @@ export const getDeckZoneSensor = (deckNum) => gql`
     }
   }
 `;
+
 
 
 let socketUrl = rootReducer.socketUrl

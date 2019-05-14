@@ -7,9 +7,11 @@ const graphql = require('graphql'),
 
 
 var deckzones = async (DeckNumber) => {
+    console.log(DeckNumber)
+    DeckNumber = DeckNumber ? { DeckNumber } : null
     return await new Promise((resolve) => {
         DeckZonesModel.findAll({
-            where: { DeckNumber },
+            where: DeckNumber,
             attributes:
                 [
                     'DeckZoneID',
@@ -156,7 +158,7 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(DeckZoneType),
             args: { deckNum: { type: GraphQLID } },
             resolve(parent, args) {
-                return deckzones(args.deckNum)
+                return deckzones(args.deckNum && args.deckNum)
             }
         },
         // DeckSensors: {

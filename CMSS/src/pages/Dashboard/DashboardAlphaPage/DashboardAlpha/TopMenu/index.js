@@ -9,6 +9,25 @@ import cookie from 'react-cookie'
 import './style.scss'
 import { message } from 'antd'
 
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import _ from "lodash"
+
+const getAllDeckZonSensor = () => gql`
+  query get {
+    DeckZones {       
+      DeckZoneName       
+      DeckLocations {      
+        SecurityDevices {       
+          Equipments(EquipmentTypeName:"Deck Sensor") {
+            EquipmentTypeName
+          }
+        }
+      }
+    }
+  }
+`;
+
 const mapStateToProps = (state, props) => ({
   urls: state.urls,
   decks: state.decksInfo,
@@ -825,27 +844,27 @@ function DropDownLogo(props) {
       </li>
       <li className={"content"}>
         <div className="dropdownlink">
-            3900 SW 30th Avenue
+          3900 SW 30th Avenue
         </div>
       </li>
       <li className={"content"}>
         <div className="dropdownlink">
-            Fort Lauderdale, FL 33312
+          Fort Lauderdale, FL 33312
         </div>
       </li>
       <li className={"content"}>
         <div className="dropdownlink">
-            USA
+          USA
         </div>
       </li>
       <li className={"content"}>
         <div className="dropdownlink">
-            +1-954-653-0630
+          +1-954-653-0630
         </div>
       </li>
       <li className={"content"}>
-         <div className="dropdownlink">
-            www.palladiumtechs.com
+        <div className="dropdownlink">
+          www.palladiumtechs.com
         </div>
       </li>
     </ul>
@@ -996,8 +1015,8 @@ function DropDownCameras(props) {
                           camera.EquipmentSubTypeID === 2
                             ? cameraFixedImage
                             : camera.EquipmentSubTypeID === 3
-                            ? cameraPtzImage
-                            : camera360Image
+                              ? cameraPtzImage
+                              : camera360Image
                         }
                         alt="CameraImage"
                       />
@@ -1005,8 +1024,8 @@ function DropDownCameras(props) {
                       {visible ? (
                         <i className="fa fa-eye" aria-hidden="true" />
                       ) : (
-                        <i className="fa fa-eye-slash" aria-hidden="true" />
-                      )}
+                          <i className="fa fa-eye-slash" aria-hidden="true" />
+                        )}
                     </div>
                   </li>
                 )
@@ -1090,8 +1109,8 @@ function DropDownPlayback(props) {
                           camera.EquipmentSubTypeID === 2
                             ? cameraFixedImage
                             : camera.EquipmentSubTypeID === 3
-                            ? cameraPtzImage
-                            : camera360Image
+                              ? cameraPtzImage
+                              : camera360Image
                         }
                         alt="CameraImage"
                       />
@@ -1268,9 +1287,15 @@ function DropDownAccessPoint(props) {
     </ul>
   )
 }
-
+var includeDecksensor = (DeckLocations) => {
+  const equipmenttypename = "Deck Sensor"
+  for (let e of DeckLocations)
+    for (let ee of e['SecurityDevices'])
+      for (let eee of ee['Equipments'])
+        if (eee['EquipmentTypeName'] === equipmenttypename) return true
+}
 function DropDownDeckSensor(props) {
-  let { type, deckZones, dropDownItemClick, expandedIndex, itemClick } = props
+  let { type, dropDownItemClick, expandedIndex, itemClick } = props
   return (
     <ul className="dropdown">
       <li className="title">
@@ -1308,31 +1333,35 @@ function DropDownDeckSensor(props) {
           />
           <span className={'subTitle'}>{'BY ZONE'}</span>
         </div>
-        <ul
-          className="submenuItems"
-          style={expandedIndex === 1 ? { display: 'block' } : { display: 'none' }}
-        >
-          {deckZones.map(deckZone => {
-            if (deckZone.DeckZoneName === 'No Zone') return <div />
-            return (
-              <li>
-                <div className={'subCaption'}>{deckZone.DeckZoneName}</div>
-                <div
-                  className={'listItem functionItem'}
-                  onClick={itemClick.bind(this, deckZone, 2)}
-                >
-                  {'ON'}
-                </div>
-                <div
-                  className={'listItem functionItem'}
-                  onClick={itemClick.bind(this, deckZone, 3)}
-                >
-                  {'OFF'}
-                </div>
-              </li>
-            )
-          })}
-        </ul>
+        <Query query={getAllDeckZonSensor()}>
+          {({ loading, data }) => !loading && (
+            <ul
+              className="submenuItems"
+              style={expandedIndex === 1 ? { display: 'block' } : { display: 'none' }}
+            >
+              {_.filter(data.DeckZones, e => includeDecksensor(e.DeckLocations)).map(deckZone => {
+                if (deckZone.DeckZoneName === 'No Zone') return <div />
+                return (
+                  <li>
+                    <div className={'subCaption'}>{deckZone.DeckZoneName}</div>
+                    <div
+                      className={'listItem functionItem'}
+                      onClick={itemClick.bind(this, deckZone, 2)}
+                    >
+                      {'ON'}
+                    </div>
+                    <div
+                      className={'listItem functionItem'}
+                      onClick={itemClick.bind(this, deckZone, 3)}
+                    >
+                      {'OFF'}
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </Query>
       </li>
     </ul>
   )
