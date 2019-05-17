@@ -434,7 +434,7 @@ class CameraEventView extends React.Component {
                   <i className="fa fa-caret-right" />
                 </span>
               )}
-            <span className={'sortType'}>Location</span>
+            <span className={'sortType'}>Sort Elements</span>
           </div>
           <div
             className={sortType === 'device' ? 'sortItem selected' : 'sortItem'}
@@ -449,7 +449,7 @@ class CameraEventView extends React.Component {
                   <i className="fa fa-caret-right" />
                 </span>
               )}
-            <span className={'sortType'}>Device Type</span>
+            <span className={'sortType'}>Sort Elements</span>
           </div>
         </div>
         <div className={'headerArea row'}>
