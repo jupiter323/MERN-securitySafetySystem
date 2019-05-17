@@ -16,7 +16,8 @@ import _ from "lodash"
 const getAllDeckZonSensor = () => gql`
   query get {
     DeckZones {       
-      DeckZoneName       
+      DeckZoneName 
+      DeckNumber      
       DeckLocations {      
         SecurityDevices {       
           Equipments(EquipmentTypeName:"Deck Sensor") {
@@ -506,7 +507,7 @@ class TopMenu extends React.Component {
     }
   }
 
-  onDeckSensorItemClick = (zoneInfo, type) => {
+  onDeckSensorItemClick = async (zoneInfo, type) => {
     let messageInfo = ''
     let user = cookie.load('UserName')
     switch (type) {
@@ -519,9 +520,11 @@ class TopMenu extends React.Component {
         break
       }
       case 2: {
-        let curDeck = this.props.decks.decksArray.find(deck => {
+
+        let curDeck = await this.props.decks.decksArray.find(deck => {
           return deck.DeckNumber === zoneInfo.DeckNumber
         })
+        console.log(zoneInfo, type, this.props.decks)
         messageInfo +=
           '<DeckSensorZoneEnable><' +
           user +

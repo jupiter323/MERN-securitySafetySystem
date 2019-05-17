@@ -290,20 +290,20 @@ class CameraEventView extends React.Component {
       }
       let new_row = $(
         `<div class="` +
-          className +
-          `">
+        className +
+        `">
                   <div class="col-3 eventItem">` +
-          log.eventType +
-          `</div>
+        log.eventType +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.datetime +
-          `</div>
+        log.datetime +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.location +
-          `</div>
+        log.location +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.device +
-          `</div>
+        log.device +
+        `</div>
                 </div>`,
       )
       $('#cameraEventTableContainer')
@@ -331,20 +331,20 @@ class CameraEventView extends React.Component {
       }
       let new_row = $(
         `<div class="` +
-          className +
-          `">
+        className +
+        `">
                   <div class="col-3 eventItem">` +
-          log.eventType +
-          `</div>
+        log.eventType +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.datetime +
-          `</div>
+        log.datetime +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.location +
-          `</div>
+        log.location +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.device +
-          `</div>
+        log.device +
+        `</div>
                 </div>`,
       )
       $('#cameraEventTableContainer')
@@ -365,6 +365,7 @@ class CameraEventView extends React.Component {
   render() {
     let { border, sortType, sortOrder, x, y, width, height } = this.state
     let { cameraEventViewInfo } = this.props
+
     let display = cameraEventViewInfo.display ? 'block' : 'none'
     let cornerImage = ''
     if (border === 'blue') {
@@ -388,7 +389,7 @@ class CameraEventView extends React.Component {
           topLeft: false,
         }}
       >
-        <div className={'captionArea'}>EVENT LOG</div>
+        <div className={'captionArea'}>{cameraEventViewInfo.accessInfo && cameraEventViewInfo.accessInfo.DeviceName}</div>
         <div className={'sortArea'}>
           <div
             className={sortType === 'datetime' ? 'sortItem selected' : 'sortItem'}
@@ -399,10 +400,10 @@ class CameraEventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Event Time</span>
           </div>
           <div
@@ -414,10 +415,10 @@ class CameraEventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Event Type</span>
           </div>
           <div
@@ -429,10 +430,10 @@ class CameraEventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Location</span>
           </div>
           <div
@@ -444,10 +445,10 @@ class CameraEventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Device Type</span>
           </div>
         </div>
@@ -463,7 +464,7 @@ class CameraEventView extends React.Component {
           onScroll={this.handleScroll}
         >
           <div
-              className={'tableArea'}
+            className={'tableArea'}
           />
         </div>
         <img src={cornerImage} className="cornerImage" alt="corner" />

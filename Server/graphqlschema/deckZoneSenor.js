@@ -3,7 +3,7 @@ const DeckLocationsModel = require('../models').DeckLocations;
 const DeviceModel = require('../models').SecurityDevices;
 const EquipmentTypesModel = require('../models').EquipmentTypes;
 const graphql = require('graphql'),
-    { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList } = graphql
+    { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList,GraphQLInt } = graphql
 
 
 var deckzones = async (DeckNumber) => {
@@ -141,7 +141,7 @@ const DeckZoneType = new GraphQLObjectType({
             type: GraphQLString
         },
         DeckNumber: {
-            type: GraphQLID
+            type: GraphQLInt
         },
         DeckLocations: {
             type: new GraphQLList(DeckLocationType),
