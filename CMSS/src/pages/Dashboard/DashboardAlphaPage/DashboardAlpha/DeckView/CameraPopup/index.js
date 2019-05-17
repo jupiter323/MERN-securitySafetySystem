@@ -25,63 +25,7 @@ class CameraPopup extends React.Component {
   socketOpened = false
 
   componentDidMount() {
-    this.ws.onopen = () => {
-      console.log('opened')
-      this.socketOpened = true
-    }
-
-    this.ws.onmessage = evt => {
-      console.log('receive mag', evt.data)
-      var received_msg = evt.data
-      let result_array = received_msg.split('<')
-      if (result_array.length > 1) {
-        let command_type = result_array[1].slice(0, -1)
-        switch (command_type) {
-          case 'CameraLiftActionSingle': {
-            if (result_array.length === 6) {
-              let result = result_array[5].slice(0, -1)
-
-              if (result === 'OK') {
-                console.log("CameraPopup: ", this.props.info)
-                let cameraName = this.props.info.accessInfo.DeviceName
-                let command = result_array[4].slice(0, -1)
-                message.info(
-                  cameraName + ' is ' + command === 'Raise'
-                    ? 'raised'
-                    : 'lowered' + ' successfully.',
-                )
-                getAllDeviceAttributes(this.props.dispatch)
-              } else {
-                message.error('Can not raise/lower this camera..')
-              }
-            } else if (result_array.length === 7) {
-              let result = result_array[5].slice(0, -1)
-
-              if (result === 'OK') {
-                let cameraName = this.props.info.accessInfo.DeviceName
-                let command = result_array[4].slice(0, -1)
-                message.info(
-                  cameraName + ' is ' + command === 'Raise'
-                    ? 'raised'
-                    : 'lowered' + ' successfully.',
-                )
-                getAllDeviceAttributes(this.props.dispatch)
-              } else {
-                message.error('Can not raise/lower this camera..')
-              }
-            }
-            break
-          }
-        }
-      }
-    }
-
-    this.ws.onclose = () => {
-      // websocket is closed.
-      console.log('Connection is closed...')
-      this.socketOpened = false
-      document.getElementById('root').style.cursor = 'default'
-    }
+    this.openSocket()
   }
 
   openSocket = () => {
@@ -102,7 +46,7 @@ class CameraPopup extends React.Component {
               let result = result_array[5].slice(0, -1)
 
               if (result === 'OK') {
-                let cameraName = this.props.info.accessInfo?this.props.info.accessInfo.DeviceName:"This device";
+                let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
                 let command = result_array[4].slice(0, -1)
                 message.info(
                   cameraName + ' is ' + command === 'Raise'
@@ -117,7 +61,7 @@ class CameraPopup extends React.Component {
               let result = result_array[5].slice(0, -1)
 
               if (result === 'OK') {
-                  let cameraName = this.props.info.accessInfo?this.props.info.accessInfo.DeviceName:"This device";
+                let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
                 let command = result_array[4].slice(0, -1)
                 message.info(
                   cameraName + ' is ' + command === 'Raise'
@@ -184,7 +128,7 @@ class CameraPopup extends React.Component {
       cameraInfo: info,
     });
     setTimeout(() => {
-        getSecurityEventsByCameraId(info.accessInfo.DeviceID, dispatch)
+      getSecurityEventsByCameraId(info.accessInfo.DeviceID, dispatch)
     }, 10000);
 
   }
