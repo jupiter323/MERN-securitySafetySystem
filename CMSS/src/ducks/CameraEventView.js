@@ -22,12 +22,12 @@ export default function(state = INITIAL_STATE, action) {
     }
     case 'CLOSE_CAMERA_EVENT_VIEW_DISPLAY': {
       return {
-        ...state,
-        ...(state.display = false),
+        ...state,        
         ...(state.cameraEventLogs = []),
         ...(state.cameraInfo = {}),
         ...(state.sortType = 'datetime'),
         ...(state.order = 0),
+        ...(state.display = false),
       }
     }
     case 'INIT_CAMERA_EVENT_LOG': {

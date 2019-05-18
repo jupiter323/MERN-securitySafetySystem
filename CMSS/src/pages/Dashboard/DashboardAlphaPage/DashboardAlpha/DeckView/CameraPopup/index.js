@@ -127,9 +127,10 @@ class CameraPopup extends React.Component {
       display: true,
       cameraInfo: info,
     });
-    setTimeout(() => {
-      getSecurityEventsByCameraId(info.accessInfo.DeviceID, dispatch)
-    }, 10000);
+ 
+    // setTimeout(() => {
+    //   getSecurityEventsByCameraId(info.accessInfo.DeviceID, dispatch)
+    // }, 10000);
 
   }
 

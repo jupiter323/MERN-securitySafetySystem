@@ -40,6 +40,7 @@ const mapStateToProps = (state, props) => ({
   widgetInfo: state.widgetInfo,
   accessInfo: state.accessInfo,
   eventInfo: state.eventInfo,
+  cameraEventViewInfo: state.cameraEventViewInfo
 })
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
@@ -59,7 +60,7 @@ class DashboardAlpha extends React.PureComponent {
     super(props)
     this.state = {
       day: new Date(),
-      items: [0, 1, 2, 3, 4].map(function(i, key, list) {
+      items: [0, 1, 2, 3, 4].map(function (i, key, list) {
         return {
           i: i.toString(),
           x: i * 2,
@@ -488,7 +489,7 @@ class DashboardAlpha extends React.PureComponent {
     if (grid_lay_conf.rowHeight) {
       grid_lay_conf.rowHeight = r_height
     }
-    let { accessInfo } = this.props
+    let { accessInfo, cameraEventViewInfo } = this.props
     return (
       <div id={"mainContainer"}>
         <TopMenu
@@ -508,10 +509,10 @@ class DashboardAlpha extends React.PureComponent {
             {_.map(items, el => this.createElement(el))}
           </ResponsiveReactGridLayout>
         ) : (
-          <SplashScreen />
-        )}
+            <SplashScreen />
+          )}
         <AccessControlView accessInfo={accessInfo} />
-        <CameraEventView />
+        {cameraEventViewInfo.display && <CameraEventView />}
       </div>
     )
   }

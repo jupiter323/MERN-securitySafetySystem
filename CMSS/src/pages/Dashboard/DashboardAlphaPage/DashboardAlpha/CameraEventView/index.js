@@ -10,6 +10,7 @@ let update_flag = true
 let eventRow_count = 50
 let init_flag = false
 
+var intval
 const mapStateToProps = (state, props) => ({
   urls: state.urls,
   devicesInfo: state.devicesInfo,
@@ -33,31 +34,38 @@ class CameraEventView extends React.Component {
       border: 'blue',
       sortType: 'datetime',
       sortOrder: 0,
-      limit_count: 50,
+      limit_count: 50
     }
   }
 
   componentDidMount() {
-    //this.initTable();
     $('#CameraEventLogView').draggable({})
-
+    this.onSortClick(this.state.sortType)
+    this.getEventLogs()
+    this.initTable()
+    // $('#CameraEventLogView')
+    //     .width(600)
+    //     .height(400)
   }
-
   componentDidUpdate() {
-    if (!init_flag) {
-      this.initTable()
-      $('#CameraEventLogView')
-        .width(600)
-        .height(400)
-    }
+    // let { cameraEventViewInfo } = this.props
+    // let eventArray = cameraEventViewInfo.cameraEventLogs || []
+    // eventArray = eventArray.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
+    // if (eventArray.length)
+    //   $('#CameraEventLogView')
+    //     .width(600)
+    //     .height(400)
+    // else
+    //   $('#CameraEventLogView')
+    //     .height(200)
   }
 
-  onClose = () => {
+  onClose = async () => {
     let { dispatch } = this.props
     this.setState({
       sortType: 'datetime',
       sortOrder: 0,
-      limit_count: 50,
+      limit_count: 50
     })
     $('#cameraEventTableContainer')
       .find('.tableArea')
@@ -69,11 +77,13 @@ class CameraEventView extends React.Component {
     if ($('#CameraEventLogView')) {
       $('#CameraEventLogView').css({ top: 100, left: 200 })
     }
+    init_flag = false
+    await clearTimeout();
+    await clearInterval(intval);
     dispatch({
       type: 'CLOSE_CAMERA_EVENT_VIEW_DISPLAY',
     })
-    init_flag = false
-    clearTimeout()
+
   }
 
   updateLatest = (latestLogs, latest_time) => {
@@ -81,7 +91,7 @@ class CameraEventView extends React.Component {
     let { cameraEventViewInfo } = this.props
     if (!$('#cameraEventTableContainer')[0]) return
     let scrollTop = $('#cameraEventTableContainer')[0].scrollTop
-    if (sortType === 'datetime' && sortOrder === 0 && scrollTop === 0 && latestLogs.length > 0) {
+    if (sortType === 'datetime' && sortOrder === 0 && scrollTop === 0 && latestLogs.length > 0 && cameraEventViewInfo.display) {
       latest_time = latestLogs[0].DateTime
       let eventLogs = []
       let eventArray = latestLogs
@@ -119,11 +129,34 @@ class CameraEventView extends React.Component {
       })
     }, 500)
   }
+  getEventLogs = () => {
 
+    intval = setInterval(() => {
+      let { cameraEventViewInfo, dispatch } = this.props
+      let eventArray = cameraEventViewInfo.cameraEventLogs || []
+      console.log("+++++++++++++++++++++++++++", eventArray)
+      eventArray = eventArray.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
+      if (typeof eventArray === 'undefined' || eventArray.length === 0) {
+
+        // await dispatch({
+        //   type: 'INIT_CAMERA_EVENT_LOG',
+        // })
+        // getSecurityEventsByCameraId(cameraEventViewInfo.accessInfo.DeviceID, dispatch)
+        this.onSortClick(this.state.sortType)
+        $('#CameraEventLogView')
+          .height(200)
+      } else {
+        clearInterval(intval);
+      }
+    }, 5000)
+
+
+  }
   initTable = () => {
     let eventLogs = []
     let { cameraEventViewInfo } = this.props
-    let eventArray = cameraEventViewInfo.cameraEventLogs
+    let eventArray = cameraEventViewInfo.cameraEventLogs || []
+    eventArray = eventArray.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
     if (!init_flag && typeof eventArray !== 'undefined' && eventArray.length > 1) {
       let { sortType, sortOrder } = this.state
       if (sortType === 'datetime' && sortOrder === 0) {
@@ -272,7 +305,12 @@ class CameraEventView extends React.Component {
   }
 
   renderLatest = eventLogs => {
+    let { cameraEventViewInfo } = this.props
+    eventLogs = eventLogs.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
     eventLogs.forEach(log => {
+      $('#CameraEventLogView')
+        .width(600)
+        .height(400)
       let className = 'row eventRow'
       switch (log.type) {
         case 'red': {
@@ -313,7 +351,11 @@ class CameraEventView extends React.Component {
   }
 
   renderTable = eventLogs => {
-    eventLogs.forEach(log => {
+    const { cameraEventViewInfo } = this.props
+    eventLogs.filter(e => e.device.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase()).forEach(log => {
+      $('#CameraEventLogView')
+        .width(600)
+        .height(400)
       let className = 'row eventRow'
       switch (log.type) {
         case 'red': {
@@ -350,6 +392,7 @@ class CameraEventView extends React.Component {
       $('#cameraEventTableContainer')
         .find('.tableArea')
         .append(new_row)
+
     })
   }
 
@@ -366,7 +409,7 @@ class CameraEventView extends React.Component {
     let { border, sortType, sortOrder, x, y, width, height } = this.state
     let { cameraEventViewInfo } = this.props
 
-    let display = cameraEventViewInfo.display ? 'block' : 'none'
+    // let display = cameraEventViewInfo.display ? 'block' : 'none'
     let cornerImage = ''
     if (border === 'blue') {
       cornerImage = 'resources/images/background/blue-corner.png'
@@ -375,7 +418,7 @@ class CameraEventView extends React.Component {
       <Resizable
         className={'CameraEventLogView'}
         id={'CameraEventLogView'}
-        style={{ display: display }}
+        style={{ display: "block" }}
         onResizeStart={this.handleResizeStart}
         onResizeStop={this.handleResizeStop}
         enable={{
