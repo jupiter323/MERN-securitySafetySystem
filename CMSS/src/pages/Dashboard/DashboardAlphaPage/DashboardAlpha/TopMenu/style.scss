@@ -6,288 +6,393 @@ $font-light: #e7e6f1;
 $font-dark: #333;
 
 .topMenu {
-  background: linear-gradient(180deg,rgba(24,37,127,0) 0%,rgba(22,50,173,0.5) 100%);
-  width: 100%;
-  margin: 0;
-  height: 8rem;
-  border-bottom: 1px solid #00EDFF;
-  //z-index: -1;
-  ul.nav {
-    height: 8rem !important;
-    display: flex;
-    position: relative;
-    flex:{direction: row};
-    align-items: center;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0;
-    list-style: none;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-
-    li.mySolaris {
-      position: relative;
-      .logoImage {
-        height: 80%;
-      }
-    }
-
-    li.palladiumLogo {
-      position: relative;
-    }
-
-    li.securityLavel {
-      position: relative;
-    }
-
-    > li{
-      //width: 1% !important;
-      position: relative;
-      margin: 0%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: {
-        grow: 1;
-        shrink: 0;
-      };
-      height: 100%;
-      font: {
-        size: 14px;
-      };
-      text: {
-        align: center;
-        transform: uppercase;
-      }
-      line-height: 60px;
-      letter-spacing: 1px;
-      color: rgba(0,237,255,1);
-      cursor: pointer;
-      .menuItemImage {
-        height: 60px;
-        cursor: pointer;
-      }
-      .bigItemImage {
-        height: 100%;
-      }
-      // CSS States ===============================
-      &:hover {
-        ul.dropdown {
-          visibility: visible;
-          transform: translate(0,0);
-          opacity: 1;
-          z-index: 1000;
-          > li {
-            animation: {
-              name: slideInLeft;
-              duration: 0.3s;
-              timing-function: ease-in-out;
-              fill-mode: backwards;
-            }
-          }
-        }
-      }
-      // nth-child ==============================
-      &:first-child {
-        border-top-left-radius: 6px;
-      };
-      &:last-child {
-        border-top-right-radius: 6px;
-      };
-    };
-  }
-
-  ul.dropdown {
-    visibility: hidden;
-    display: flex;
-    position: absolute;
-    top: 100%;
-    flex-direction: column;
-    width: 18rem;
-    max-height: 30rem;
-    overflow-y: auto;
-    height: 28rem;
+    background: linear-gradient(180deg, rgba(24, 37, 127, 0) 0%, rgba(22, 50, 173, 0.5) 100%);
+    width: 100%;
     margin: 0;
-    padding: 5px 0 30px;
-    list-style: none;
-    color: rgba(0,237,255,1);
-    background: rgba(0,40,80,1);
-    border: solid 2px #00efff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px 1px #0274ff, inset 0 0 20px rgb(2,116,255);
-    transform: translate(0,-50px);
-    transition: transform 0.2s ease-out, opacity 0.2s, z-index 0s 0.2s;
-    opacity: 0;
-    z-index: 0;
-    > li {
-      font: {
-        size: 1rem;
-      }
-      cursor: pointer;
-      .dropdownlink {
-        cursor: pointer;
-        display: block;
-        color: rgba(0,237,255,1);
+    height: 8rem;
+    border-bottom: 1px solid #00EDFF;
+
+    //z-index: -1;
+    ul.nav {
+        height: 8rem !important;
+        display: flex;
         position: relative;
-        transition: all 0.4s ease-out;
-        i {
-          position: absolute;
-          top: 17px;
-          left: 16px;
-        }
-        .fa-caret-right {
-          left: 12px;
-          right: auto;
-        }
-        &:hover {
-          background: rgba(30,80,150,0.8);
-          .fa-eye {
-            transform: scale(1.4);
-          }
-          .fa-eye-slash {
-            transform: scale(1.4);
-          }
-        }
-      }
-      ul {
-        list-style: none;
-      }
 
-      a {
-        text-decoration: none;
-      }
-      ul.submenuItems {
+        flex: {
+            direction: row
+        }
+
+        ;
+        align-items: center;
+        max-width: 100%;
+        margin: 0 auto;
         padding: 0;
-        display: none;
-        background: rgba(0,40,80,0.8);
-        li {
-          ul.submenuItems {
-            li {
-              cursor: pointer;
-              display: block;
-              color: rgba(0,237,255,1);
-              font-size: 0.9rem;
-              position: relative;
-              &:hover {
-                background: rgba(30,80,150,0.8);
-              }
-            }
-          }
-          .listItem {
-            cursor: pointer;
-            display: block;
-            color: rgba(0,237,255,1);
-            font-size: 0.9rem;
+        list-style: none;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+
+        li.mySolaris {
             position: relative;
-            .liItemImage {
-              position: absolute;
-              left: 2%;
-              top: 30%;
-              //width: 20px;
-              height: 1.5rem;
+
+            .logoImage {
+                height: 80%;
             }
-            .cameraName {
-              position: relative;
-              margin-left: 5%;
+        }
+
+        li.palladiumLogo {
+            position: relative;
+        }
+
+        li.securityLavel {
+            position: relative;
+        }
+
+        >li {
+            //width: 1% !important;
+            position: relative;
+            margin: 0%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex: {
+                grow: 1;
+                shrink: 0;
             }
-            .fa-eye {
-              position: absolute;
-              right: 0.3rem;
-              top: 2rem;
+
+            ;
+            height: 100%;
+
+            font: {
+                size: 14px;
             }
-            .fa-eye-slash {
-              position: absolute;
-              right: 0.3rem;
-              top: 2rem;
+
+            ;
+
+            text: {
+                align: center;
+                transform: uppercase;
             }
+
+            line-height: 60px;
+            letter-spacing: 1px;
+            color: rgba(0, 237, 255, 1);
+            cursor: pointer;
+
+            .menuItemImage {
+                height: 60px;
+                cursor: pointer;
+            }
+
+            .bigItemImage {
+                height: 100%;
+            }
+
+            // CSS States ===============================
             &:hover {
-              background: rgba(30,80,150,0.8);
-              .fa-eye {
-                transform: scale(1.4);
-              }
-              .fa-eye-slash {
-                transform: scale(1.4);
-              }
+                ul.dropdown {
+                    visibility: visible;
+                    transform: translate(0, 0);
+                    opacity: 1;
+                    z-index: 1000;
+
+                    >li {
+                        animation: {
+                            name: slideInLeft;
+                            duration: 0.3s;
+                            timing-function: ease-in-out;
+                            fill-mode: backwards;
+                        }
+                    }
+                }
             }
-          }
-          &:hover {
-            background: rgba(30,80,150,0.8);
-          }
-        }
-      }
 
-      // CSS State ===========================
-      &:hover {
-        .fa-eye {
-          //transform: scale(1.4);
-        }
-        .submenuItems {
-          //display: block;
-        }
-      }
-    }
-    .inAccessable {
-      color: #464349!important;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    .shown {
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    .subCaption {
-      cursor: default!important;
-    }
-  }
+            // nth-child ==============================
+            &:first-child {
+                border-top-left-radius: 6px;
+            }
 
-  .palladium-logo {
-    width: 25rem!important;
-    li.title {
-      text-align: center;
-      label {
-        font-size: 25px;
-      }
-    }
-    li.content {
-      text-align: left;
-      margin-left: 15px;
-      height: 40px;
-      font-size: 18px;
-    }
-  }
+            ;
 
-  ul.dropdown::-webkit-scrollbar-track
-  {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius: 10px;
-    background-color: rgba(0,0,0,0.3);
+            &:last-child {
+                border-top-right-radius: 6px;
+            }
+
+            ;
+        }
+
+        ;
+    }
+
+    ul.dropdown {
+        visibility: hidden;
+        display: flex;
+        position: absolute;
+        top: 100%;
+        flex-direction: column;
+        width: 18rem;
+        max-height: 30rem;
+        overflow-y: auto;
+        height: 28rem;
+        margin: 0;
+        padding: 5px 0 30px;
+        list-style: none;
+        color: rgba(0, 237, 255, 1);
+        background: rgba(0, 40, 80, 1);
+        border: solid 2px #00efff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 1px #0274ff, inset 0 0 20px rgb(2, 116, 255);
+        transform: translate(0, -50px);
+        transition: transform 0.2s ease-out, opacity 0.2s, z-index 0s 0.2s;
+        opacity: 0;
+        z-index: 0;
+
+        >li {
+            font: {
+                size: 1rem;
+            }
+
+            cursor: pointer;
+
+            .dropdownlink {
+                cursor: pointer;
+                display: block;
+                color: rgba(0, 237, 255, 1);
+                position: relative;
+                transition: all 0.4s ease-out;
+
+                i {
+                    position: absolute;
+                    top: 17px;
+                    left: 16px;
+                }
+
+                .fa-caret-right {
+                    left: 12px;
+                    right: auto;
+                }
+
+                &:hover {
+                    background: rgba(30, 80, 150, 0.8);
+
+                    .fa-eye {
+                        transform: scale(1.4);
+                    }
+
+                    .fa-eye-slash {
+                        transform: scale(1.4);
+                    }
+                }
+            }
+
+            ul {
+                list-style: none;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            ul.submenuItems {
+                padding: 0;
+                display: none;
+                background: rgba(0, 40, 80, 0.8);
+
+                li {
+                    ul.submenuItems {
+                        li {
+                            cursor: pointer;
+                            display: block;
+                            color: rgba(0, 237, 255, 1);
+                            font-size: 0.9rem;
+                            position: relative;
+
+                            &:hover {
+                                background: rgba(30, 80, 150, 0.8);
+                            }
+                        }
+                    }
+
+                    .listItem {
+                        cursor: pointer;
+                        display: block;
+                        color: rgba(0, 237, 255, 1);
+                        font-size: 0.9rem;
+                        position: relative;
+
+                        .liItemImage {
+                            position: absolute;
+                            left: 2%;
+                            top: 30%;
+                            //width: 20px;
+                            height: 1.5rem;
+                        }
+
+                        .cameraName {
+                            position: relative;
+                            margin-left: 5%;
+                        }
+
+                        .fa-eye {
+                            position: absolute;
+                            right: 0.3rem;
+                            top: 2rem;
+                        }
+
+                        .fa-eye-slash {
+                            position: absolute;
+                            right: 0.3rem;
+                            top: 2rem;
+                        }
+
+                        &:hover {
+                            background: rgba(30, 80, 150, 0.8);
+
+                            .fa-eye {
+                                transform: scale(1.4);
+                            }
+
+                            .fa-eye-slash {
+                                transform: scale(1.4);
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        background: rgba(30, 80, 150, 0.8);
+                    }
+                }
+            }
+
+            // CSS State ===========================
+            &:hover {
+                .fa-eye {
+                    //transform: scale(1.4);
+                }
+
+                .submenuItems {
+                    //display: block;
+                }
+            }
+        }
+
+        .inAccessable {
+            color: #464349 !important;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .shown {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .subCaption {
+            cursor: default !important;
+        }
+    }
+
+    .palladium-logo {
+        width: 25rem !important;
+
+        li.title {
+            text-align: center;
+
+            label {
+                font-size: 25px;
+            }
+        }
+
+        li.content {
+            text-align: left;
+            margin-left: 15px;
+            height: 40px;
+            font-size: 18px;
+        }
+    }
+
+    .numkeypad {
+        width: 33.5rem !important;
+
+        .top-row-num {
+            height: 82% !important;
+
+            .top-row-digit {
+                height: 40% !important;
+            }
+
+            .top-row-message {
+                height: 60% !important;
+            }
+        }
+
+
+        .title {
+            text-align: center;
+            font-size: 50px;
+            line-height: 40px;
+            height: 20px;
+            margin-top: 40px;
+            max-width: 90%;
+            overflow: hidden;
+        }
+
+        li.content {
+            text-align: left;
+            margin-left: 15px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+        .sub-content {
+            // display: flex;           
+            // flex-direction: column;
+            // width: 18rem;
+            // max-height: 30rem;
+            // overflow-y: auto;
+            // height: 28rem;
+            // margin: 0;
+            // padding: 5px 0 30px;
+            // list-style: none;
+            // color: rgba(0, 237, 255, 1);
+            // background: rgba(0, 40, 80, 1);
+            // border: solid 2px #00efff;
+            border: solid 1px #0086ff;
+            border-radius: 10px;
+
+        }
+    }
+
+    ul.dropdown::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    ul.dropdown::-webkit-scrollbar {
+        width: 12px;
+        background-color: rgba(0, 0, 0, 0);
+        padding-top: 20px;
+    }
+
+    ul.dropdown::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 237, 255, 1);
+    }
+
+    @keyframes slideInLeft {
+        from {
+            transform: translate(-25%, 0);
+            opacity: 0;
+        }
+
+        to {
+            transform: translate(0, 0);
+            opacity: 1;
+        }
+    }
 }
-
-  ul.dropdown::-webkit-scrollbar
-  {
-    width: 12px;
-    background-color: rgba(0,0,0,0);
-    padding-top: 20px;
-  }
-
-  ul.dropdown::-webkit-scrollbar-thumb
-  {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: rgba(0,237,255,1);
-  }
-
-  @keyframes slideInLeft {
-    from {
-      transform: translate(-25%,0);
-      opacity: 0;
-    }
-    to {
-      transform: translate(0,0);
-      opacity: 1;
-    }
-  }
-}
-
