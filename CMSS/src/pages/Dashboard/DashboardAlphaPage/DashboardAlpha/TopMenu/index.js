@@ -462,7 +462,8 @@ class TopMenu extends React.Component {
     console.log('accessInfo: ', accessInfo)
     if (accessInfo.EquipmentTypeID !== 3) return
     let eventLogs = this.props.eventInfo.eventLogs
-    getSecurityEventsByDeviceID(accessInfo, eventLogs, dispatch)
+    getSecurityEventsByDeviceID(accessInfo, dispatch)
+    // getSecurityEventsByDeviceID(accessInfo, eventLogs, dispatch)
     document.getElementById('root').style.cursor = 'wait'
     triggerManualEvent()
   }

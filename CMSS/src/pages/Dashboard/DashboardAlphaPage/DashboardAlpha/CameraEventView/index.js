@@ -306,7 +306,8 @@ class CameraEventView extends React.Component {
 
   renderLatest = eventLogs => {
     let { cameraEventViewInfo } = this.props
-    eventLogs = eventLogs.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
+    console.log("event logs_______________________", eventLogs)
+    eventLogs = eventLogs.filter(e => e.device === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
     eventLogs.forEach(log => {
       $('#CameraEventLogView')
         .width(600)

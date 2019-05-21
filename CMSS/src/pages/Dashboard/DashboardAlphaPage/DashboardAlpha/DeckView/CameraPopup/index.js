@@ -44,7 +44,7 @@ class CameraPopup extends React.Component {
           case 'CameraLiftActionSingle': {
             if (result_array.length === 6) {
               let result = result_array[5].slice(0, -1)
-
+              
               if (result === 'OK') {
                 let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
                 let command = result_array[4].slice(0, -1)
@@ -54,11 +54,14 @@ class CameraPopup extends React.Component {
                     : 'lowered' + ' successfully.',
                 )
                 getAllDeviceAttributes(this.props.dispatch)
-              } else {
-                message.error('Can not raise/lower this camera..')
+              } else {               
+                let messageTxt = result_array[6].slice(0, -1)
+                message.error(messageTxt+'\nInsufficient permission to operate the camera lift')
               }
             } else if (result_array.length === 7) {
+              
               let result = result_array[5].slice(0, -1)
+              console.log(result)             
 
               if (result === 'OK') {
                 let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
@@ -69,8 +72,9 @@ class CameraPopup extends React.Component {
                     : 'lowered' + ' successfully.',
                 )
                 getAllDeviceAttributes(this.props.dispatch)
-              } else {
-                message.error('Can not raise/lower this camera..')
+              } else {         
+                let messageTxt = result_array[6].slice(0, -1)
+                message.error(messageTxt+'\nInsufficient permission to operate the camera lift')
               }
             }
             break
@@ -127,7 +131,7 @@ class CameraPopup extends React.Component {
       display: true,
       cameraInfo: info,
     });
- 
+
     // setTimeout(() => {
     //   getSecurityEventsByCameraId(info.accessInfo.DeviceID, dispatch)
     // }, 10000);
@@ -145,6 +149,8 @@ class CameraPopup extends React.Component {
       visible = info.accessInfo.cameraViewInfo ? info.accessInfo.cameraViewInfo.visible : true
     }
     let displayCam = visible ? 'none' : 'block'
+
+    let isLiftCam = info.accessInfo && info.accessInfo.EquipmentSubTypeID === 2 && info.accessInfo.AuxDeviceID > 1 ? true : false //lift camera distinguish
     return (
       <div
         className={'CameraPopup'}
@@ -155,16 +161,21 @@ class CameraPopup extends React.Component {
         }}
       >
         <div className={'caption'}>CAMERA OPTIONS</div>
-        <div className={'option'} onClick={this.onRaiseLowerClick}>
-          RAISE/LOWER
-        </div>
+        {
+          isLiftCam &&
+          <div className={'option'} onClick={this.onRaiseLowerClick}>
+            RAISE/LOWER
+           </div>
+        }
         <div
           className={'option'}
           style={{ display: displayCam }}
           onClick={this.onCamDisplayClick.bind(this, cameraId)}
         >
           DISPLAY CAM
-        </div>
+            </div>
+
+
         <div className={'option'} onClick={this.onEventHistoryClick}>
           EVENT HISTORY
         </div>
