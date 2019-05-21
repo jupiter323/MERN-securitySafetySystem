@@ -207,9 +207,11 @@ class TopMenu extends React.Component {
             } else {
               let type = result_array[4].slice(0, -1)
               if (type === 'Raise') {
-                message.error('Raise camera action is failed.')
+                let messageTxt = result_array[6].slice(0, -1)
+                message.error(messageTxt+'\tInsufficient permission to operate the camera rise.')
               } else {
-                message.error('Lower camera action is failed.')
+                let messageTxt = result_array[6].slice(0, -1)
+                message.error(messageTxt+'\tInsufficient permission to operate the camera lower.')
               }
             }
             break
@@ -1366,7 +1368,7 @@ function DropDownCamLift(props) {
           className="submenuItems"
           style={expandedIndex === 1 ? { display: 'block' } : { display: 'none' }}
         >
-          {cameraArray.map(camera => {
+          {cameraArray.filter(e => e.AuxDeviceID !== 1).map(camera => {
             let index = cameraArray.indexOf(camera)
             return (
               <li>

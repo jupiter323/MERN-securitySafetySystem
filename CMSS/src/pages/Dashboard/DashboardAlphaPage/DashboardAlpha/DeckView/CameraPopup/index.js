@@ -44,24 +44,6 @@ class CameraPopup extends React.Component {
           case 'CameraLiftActionSingle': {
             if (result_array.length === 6) {
               let result = result_array[5].slice(0, -1)
-              
-              if (result === 'OK') {
-                let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
-                let command = result_array[4].slice(0, -1)
-                message.info(
-                  cameraName + ' is ' + command === 'Raise'
-                    ? 'raised'
-                    : 'lowered' + ' successfully.',
-                )
-                getAllDeviceAttributes(this.props.dispatch)
-              } else {               
-                let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt+'\nInsufficient permission to operate the camera lift')
-              }
-            } else if (result_array.length === 7) {
-              
-              let result = result_array[5].slice(0, -1)
-              console.log(result)             
 
               if (result === 'OK') {
                 let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
@@ -72,9 +54,27 @@ class CameraPopup extends React.Component {
                     : 'lowered' + ' successfully.',
                 )
                 getAllDeviceAttributes(this.props.dispatch)
-              } else {         
+              } else {
                 let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt+'\nInsufficient permission to operate the camera lift')
+                message.error(messageTxt + '\tInsufficient permission to operate the camera lift')
+              }
+            } else if (result_array.length === 7) {
+
+              let result = result_array[5].slice(0, -1)
+              console.log(result)
+
+              if (result === 'OK') {
+                let cameraName = this.props.info.accessInfo ? this.props.info.accessInfo.DeviceName : "This device";
+                let command = result_array[4].slice(0, -1)
+                message.info(
+                  cameraName + ' is ' + command === 'Raise'
+                    ? 'raised'
+                    : 'lowered' + ' successfully.',
+                )
+                getAllDeviceAttributes(this.props.dispatch)
+              } else {
+                let messageTxt = result_array[6].slice(0, -1)
+                message.error(messageTxt + '\tInsufficient permission to operate the camera lift')
               }
             }
             break
