@@ -151,7 +151,8 @@ class AccessControlView extends React.Component {
       historyTableBottom = 'historyTable'
     }
     if (typeof accessInfo !== 'undefined' && accessInfo.hasOwnProperty('enabled')) {
-      display = accessInfo.enabled ? 'block' : 'none'
+      // display = accessInfo.enabled ? 'block' : 'none'
+      display = 'block'
       roomName = accessInfo.LocationName
       deckName = accessInfo.DeckName
       let deviceID = accessInfo.DeviceID

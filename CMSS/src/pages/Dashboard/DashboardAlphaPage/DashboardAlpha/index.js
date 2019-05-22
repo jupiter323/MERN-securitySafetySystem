@@ -40,6 +40,7 @@ const mapStateToProps = (state, props) => ({
   widgetInfo: state.widgetInfo,
   accessInfo: state.accessInfo,
   eventInfo: state.eventInfo,
+  logInfo: state.logInfo,
   cameraEventViewInfo: state.cameraEventViewInfo
 })
 
@@ -489,7 +490,7 @@ class DashboardAlpha extends React.PureComponent {
     if (grid_lay_conf.rowHeight) {
       grid_lay_conf.rowHeight = r_height
     }
-    let { accessInfo, cameraEventViewInfo } = this.props
+    let { accessInfo, cameraEventViewInfo, logInfo} = this.props
     return (
       <div id={"mainContainer"}>
         <TopMenu
@@ -500,18 +501,19 @@ class DashboardAlpha extends React.PureComponent {
           addPlaybackView={this.addPlaybackView}
           removeView={this.onRemoveItem}
         />
-        {display ? (
-          <ResponsiveReactGridLayout
-            onLayoutChange={this.onLayoutChange}
-            onBreakpointChange={this.onBreakpointChange}
-            {...grid_lay_conf}
-          >
-            {_.map(items, el => this.createElement(el))}
-          </ResponsiveReactGridLayout>
-        ) : (
+        {display ?
+          (
+            <ResponsiveReactGridLayout
+              onLayoutChange={this.onLayoutChange}
+              onBreakpointChange={this.onBreakpointChange}
+              {...grid_lay_conf}
+            >
+              {_.map(items, el => this.createElement(el))}
+            </ResponsiveReactGridLayout>
+          ) : (
             <SplashScreen />
           )}
-        <AccessControlView accessInfo={accessInfo} />
+        {logInfo && logInfo.enabled && <AccessControlView accessInfo={accessInfo} />}
         {cameraEventViewInfo.display && <CameraEventView />}
       </div>
     )

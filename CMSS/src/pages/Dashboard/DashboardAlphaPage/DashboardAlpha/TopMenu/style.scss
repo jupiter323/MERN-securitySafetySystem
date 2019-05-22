@@ -300,17 +300,13 @@ $font-dark: #333;
 
         li.title {
             text-align: center;
-
-            label {
-                font-size: 25px;
-            }
         }
 
         li.content {
-            text-align: left;
-            margin-left: 15px;
-            height: 40px;
-            font-size: 18px;
+            // text-align: left;
+            // margin-left: 15px;
+            // height: 40px;
+            // font-size: 18px;
         }
     }
 
@@ -333,33 +329,14 @@ $font-dark: #333;
         .title {
             text-align: center;
             font-size: 50px;
-            line-height: 40px;
-            height: 20px;
-            margin-top: 40px;
-            max-width: 90%;
-            overflow: hidden;
-        }
-
-        li.content {
-            text-align: left;
-            margin-left: 15px;
+            line-height: 50px;
             height: 40px;
-            font-size: 18px;
-        }
+            margin-top: 30px;
+            max-width: 90%;
+            overflow: hidden;          
+        }    
 
-        .sub-content {
-            // display: flex;           
-            // flex-direction: column;
-            // width: 18rem;
-            // max-height: 30rem;
-            // overflow-y: auto;
-            // height: 28rem;
-            // margin: 0;
-            // padding: 5px 0 30px;
-            // list-style: none;
-            // color: rgba(0, 237, 255, 1);
-            // background: rgba(0, 40, 80, 1);
-            // border: solid 2px #00efff;
+        .sub-content {         
             border: solid 1px #0086ff;
             border-radius: 10px;
 

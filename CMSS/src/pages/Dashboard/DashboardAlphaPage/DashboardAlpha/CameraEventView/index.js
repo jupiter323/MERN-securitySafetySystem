@@ -34,13 +34,15 @@ class CameraEventView extends React.Component {
       border: 'blue',
       sortType: 'datetime',
       sortOrder: 0,
-      limit_count: 50
+      limit_count: 50,
+      noEventLog: false
     }
   }
 
   componentDidMount() {
     $('#CameraEventLogView').draggable({})
-    this.onSortClick(this.state.sortType)
+    // this.onSortClick(this.state.sortType)
+    this.initAndGetLogs()
     this.getEventLogs()
     this.initTable()
     // $('#CameraEventLogView')
@@ -129,6 +131,14 @@ class CameraEventView extends React.Component {
       })
     }, 500)
   }
+  initAndGetLogs = () => {
+    console.log("initand get logs+++")
+    let { cameraEventViewInfo, dispatch } = this.props
+    dispatch({
+      type: 'INIT_CAMERA_EVENT_LOG',
+    })
+    getSecurityEventsByCameraId(cameraEventViewInfo.accessInfo.DeviceID, dispatch)
+  }
   getEventLogs = () => {
 
     intval = setInterval(() => {
@@ -138,19 +148,15 @@ class CameraEventView extends React.Component {
       eventArray = eventArray.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
       if (typeof eventArray === 'undefined' || eventArray.length === 0) {
 
-        // await dispatch({
-        //   type: 'INIT_CAMERA_EVENT_LOG',
-        // })
-        // getSecurityEventsByCameraId(cameraEventViewInfo.accessInfo.DeviceID, dispatch)
-        this.onSortClick(this.state.sortType)
+        this.initAndGetLogs()
+
         $('#CameraEventLogView')
           .height(200)
+        this.setState({ noEventLog: true })
       } else {
         clearInterval(intval);
       }
     }, 5000)
-
-
   }
   initTable = () => {
     let eventLogs = []
@@ -309,6 +315,7 @@ class CameraEventView extends React.Component {
     console.log("event logs_______________________", eventLogs)
     eventLogs = eventLogs.filter(e => e.device === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
     eventLogs.forEach(log => {
+      this.setState({ noEventLog: false })
       $('#CameraEventLogView')
         .width(600)
         .height(400)
@@ -354,6 +361,7 @@ class CameraEventView extends React.Component {
   renderTable = eventLogs => {
     const { cameraEventViewInfo } = this.props
     eventLogs.filter(e => e.device.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase()).forEach(log => {
+      this.setState({ noEventLog: false })
       $('#CameraEventLogView')
         .width(600)
         .height(400)
@@ -407,7 +415,7 @@ class CameraEventView extends React.Component {
   }
 
   render() {
-    let { border, sortType, sortOrder, x, y, width, height } = this.state
+    let { border, sortType, sortOrder, x, y, width, height, noEventLog } = this.state
     let { cameraEventViewInfo } = this.props
 
     // let display = cameraEventViewInfo.display ? 'block' : 'none'
@@ -507,6 +515,7 @@ class CameraEventView extends React.Component {
           id={'cameraEventTableContainer'}
           onScroll={this.handleScroll}
         >
+          {noEventLog && <p className="nodevice">No events found for this device.</p>}
           <div
             className={'tableArea'}
           />

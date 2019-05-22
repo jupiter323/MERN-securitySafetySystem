@@ -5,7 +5,7 @@
   display: none;
   width: 600px;
   min-width: 620px;
-  height: 400px;
+  height: 200px;
   top: 100px;
   left: 200px;
   background: rgb(0, 19, 33);
@@ -34,6 +34,11 @@
     max-height: calc(100% - 160px);
     display: block;
     margin-left: 20px;
+    .nodevice {
+      font-size: 19px;
+      color: rgba(0,237,255,1);
+      padding: 0 5px 0 0;
+    }
     .tableArea {
       margin-right: 10px;
       width: calc(100% - 10px);

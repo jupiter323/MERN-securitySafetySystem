@@ -305,9 +305,8 @@ class LoginForm extends React.Component {
         <Form layout="vertical" hideRequiredMark onSubmit={this.onSubmit(isSubmitForm)}>
           <FormItem
             label="USER NAME"
-            style={{
-              color: 'rgba(0,237,255)',
-            }}
+            className="title-label"
+
           >
             {form.getFieldDecorator('username', {
               rules: [{ required: true, message: 'Please input user name' }],
@@ -324,7 +323,7 @@ class LoginForm extends React.Component {
               />,
             )}
           </FormItem>
-          <FormItem label="PASSWORD">
+          <FormItem label="PASSWORD" className="title-label">
             {form.getFieldDecorator('password', {
               rules: [{ required: true, message: 'Please input your password' }],
             })(

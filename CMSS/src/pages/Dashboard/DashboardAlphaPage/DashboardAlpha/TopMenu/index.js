@@ -11,6 +11,7 @@ import { message } from 'antd'
 import { Card, Col, Row } from 'antd'
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+
 import _ from "lodash"
 
 let solarisLogo = 'resources/images/logo/4.png'
@@ -93,7 +94,8 @@ class TopMenu extends React.Component {
     securitySettingDisplay: 'none',
     userName: '',
     password: '',
-    keyboardInputValue: ''
+    keyboardInputValue: '',
+    wsversion: ""
   }
 
   ws = new WebSocket(socketUrl)
@@ -168,6 +170,7 @@ class TopMenu extends React.Component {
                 })
                 cookie.save('SecurityLevelId', result_array[3].slice(0, -1))
                 cookie.save('SecurityLevelImage', result_array[5].slice(0, -1))
+                this.setState({ wsversion: result_array[4].slice(0, -1) })
               } else {
 
               }
@@ -208,10 +211,10 @@ class TopMenu extends React.Component {
               let type = result_array[4].slice(0, -1)
               if (type === 'Raise') {
                 let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt+'\tInsufficient permission to operate the camera rise.')
+                message.error(messageTxt + '\tInsufficient permission to operate the camera rise.')
               } else {
                 let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt+'\tInsufficient permission to operate the camera lower.')
+                message.error(messageTxt + '\tInsufficient permission to operate the camera lower.')
               }
             }
             break
@@ -338,6 +341,7 @@ class TopMenu extends React.Component {
                 })
                 cookie.save('SecurityLevelId', result_array[3].slice(0, -1))
                 cookie.save('SecurityLevelImage', result_array[5].slice(0, -1))
+                this.setState({ wsversion: result_array[4].slice(0, -1) })
               }
             }
             break
@@ -464,10 +468,17 @@ class TopMenu extends React.Component {
     console.log('accessInfo: ', accessInfo)
     if (accessInfo.EquipmentTypeID !== 3) return
     let eventLogs = this.props.eventInfo.eventLogs
-    getSecurityEventsByDeviceID(accessInfo, dispatch)
+
     // getSecurityEventsByDeviceID(accessInfo, eventLogs, dispatch)
     document.getElementById('root').style.cursor = 'wait'
     triggerManualEvent()
+    setTimeout(() => {
+      dispatch({
+        type: 'CLEAR_DATA',
+        accessInfo: accessInfo,
+      })
+      getSecurityEventsByDeviceID(accessInfo, dispatch)
+    }, 100)
   }
 
   onDeckSensorDropDownClick = index => {
@@ -756,7 +767,7 @@ class TopMenu extends React.Component {
           </li>
           <li>
             <img className="menuItemImage" src={numKeyPadImage} alt="NumKeyPad" />
-            <DropDownNumKeyPad type={'PALLADIUM TECHNOLOGIES'} handleKeyboardInput={this.handleKeyboardInput} keyboardInputValue={this.state.keyboardInputValue} />
+            <DropDownNumKeyPad type={'KEY PAD'} handleKeyboardInput={this.handleKeyboardInput} keyboardInputValue={this.state.keyboardInputValue} />
           </li>
           <li className={'palladiumLogo'}>
             <img
@@ -764,7 +775,7 @@ class TopMenu extends React.Component {
               src={palladiumLogoImage}
               alt="PalladiumLogo"
             />
-            <DropDownLogo type={'PALLADIUM TECHNOLOGIES'} />
+            <DropDownLogo type={'PALLADIUM TECHNOLOGIES'} wsversion = {this.state.wsversion}/>
           </li>
           <li className={'securityLavel'} onClick={this.openLoginView}>
             <img
@@ -871,7 +882,7 @@ function DropDown(props) {
   )
 }
 function DropDownNumKeyPad(props) {
-  let { type, handleKeyboardInput, keyboardInputValue } = props
+  let { handleKeyboardInput, keyboardInputValue } = props
   return (
     <ul className="dropdown numkeypad p-1">
       <div className="row w-100 m-0 top-row-num">
@@ -1026,11 +1037,21 @@ function DropDownNumKeyPad(props) {
   )
 }
 function DropDownLogo(props) {
-  let { type } = props
+  let { type, wsversion } = props
   return (
     <ul className="dropdown palladium-logo">
       <li className="title">
-        <label style={{ textDecoration: 'underline' }}>{type}</label>
+        <div style={{ textDecoration: 'underline' }}>{type}</div>
+      </li>
+      <li className={"content"}>
+        <div className="dropdownlink">
+          {`${process.env.REACT_APP_NAME} ${process.env.REACT_APP_VERSION}`}
+        </div>
+      </li>
+      <li className={"content"}>
+        <div className="dropdownlink">
+          {`web socket version : ${wsversion}`}
+        </div>
       </li>
       <li className={"content"}>
         <div className="dropdownlink">
@@ -1047,6 +1068,12 @@ function DropDownLogo(props) {
           USA
         </div>
       </li>
+      <li className={"content"}>
+        <div className="dropdownlink">
+          support@palladiumtechs.com
+        </div>
+      </li>
+
       <li className={"content"}>
         <div className="dropdownlink">
           +1-954-653-0630

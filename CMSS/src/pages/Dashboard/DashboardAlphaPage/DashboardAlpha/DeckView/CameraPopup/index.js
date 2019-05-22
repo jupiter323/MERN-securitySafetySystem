@@ -56,7 +56,7 @@ class CameraPopup extends React.Component {
                 getAllDeviceAttributes(this.props.dispatch)
               } else {
                 let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt + '\tInsufficient permission to operate the camera lift')
+                message.error(messageTxt + '\tInsufficient permission to operate the camera lift.')
               }
             } else if (result_array.length === 7) {
 
@@ -74,7 +74,7 @@ class CameraPopup extends React.Component {
                 getAllDeviceAttributes(this.props.dispatch)
               } else {
                 let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt + '\tInsufficient permission to operate the camera lift')
+                message.error(messageTxt + '\tInsufficient permission to operate the camera lift.')
               }
             }
             break
