@@ -104,173 +104,19 @@ class TopMenu extends React.Component {
   socketOpened = false
 
   componentDidMount() {
-    this.ws.onopen = () => {
-      console.log('opened')
-      this.socketOpened = true
-    }
-
-    this.ws.onmessage = evt => {
-      var received_msg = evt.data
-      let result_array = received_msg.split('<')
-      if (result_array.length > 1) {
-        let command_type = result_array[1].slice(0, -1)
-        switch (command_type) {
-          case 'UserCheckPermission': {
-            if (result_array.length === 7) {
-              let result = result_array[5].slice(0, -1)
-              if (result === 'OK') {
-                this.setState({
-                  securitySettingDisplay: 'block',
-                })
-              } else {
-                message.error('User has no permission for setting system security level.')
-              }
-            }
-            document.getElementById('root').style.cursor = 'default'
-            break
-          }
-          case 'UserChangeSecurityLevel': {
-            if (result_array.length === 6) {
-              let result = result_array[5].slice(0, -1)
-              if (result === 'OK') {
-                let data = '<GetSystemInfo>'
-                this.ws.send(data)
-              } else {
-                message.error("Can not change the security level.");
-              }
-            }
-            break
-          }
-          case 'GetSystemInfo': {
-            console.log('GetSystemInfo: ', received_msg)
-            if (result_array.length === 8) {
-              let securityLevel = result_array[5].slice(0, -1)
-              let result = result_array[2].slice(0, -1)
-              if (result === 'OK') {
-                let { dispatch } = this.props
-                dispatch({
-                  type: 'SET_System_Security_Level',
-                  systemSecurityLevel: securityLevel,
-                })
-                cookie.save('SecurityLevelId', result_array[3].slice(0, -1))
-                cookie.save('SecurityLevelImage', result_array[5].slice(0, -1))
-              }
-              document.getElementById('root').style.cursor = 'default'
-            }
-            break
-          }
-          case 'SystemInfo': {
-            console.log('SystemInfo: ', received_msg)
-            if (result_array.length === 8) {
-              let securityLevel = result_array[5].slice(0, -1)
-              let result = result_array[2].slice(0, -1)
-              if (result === 'OK') {
-                let { dispatch } = this.props
-                dispatch({
-                  type: 'SET_System_Security_Level',
-                  systemSecurityLevel: securityLevel,
-                })
-                cookie.save('SecurityLevelId', result_array[3].slice(0, -1))
-                cookie.save('SecurityLevelImage', result_array[5].slice(0, -1))
-                this.setState({ wsversion: result_array[4].slice(0, -1) })
-              } else {
-
-              }
-            }
-            break
-          }
-          case 'CameraLiftActionAll': {
-            console.log('CameraLiftActionAll: ', received_msg)
-            let result = result_array[4].slice(0, -1)
-            if (result === 'OK') {
-              let type = result_array[3].slice(0, -1)
-              if (type === 'Raise') {
-                message.success('All cameras are raised successfully.')
-              } else {
-                message.success('All cameras are lowered successfully.')
-              }
-            } else {
-              let type = result_array[3].slice(0, -1)
-              if (type === 'Raise') {
-                message.error('Raise all cameras action is failed.')
-              } else {
-                message.error('Lower all cameras action is failed.')
-              }
-            }
-            break
-          }
-          case 'CameraLiftActionSingle': {
-            console.log('CameraLiftActionSingle: ', received_msg)
-            let result = result_array[5].slice(0, -1)
-            if (result === 'OK') {
-              let type = result_array[4].slice(0, -1)
-              if (type === 'Raise') {
-                message.success('Camera is raised successfully.')
-              } else {
-                message.success('Camera is lowered successfully.')
-              }
-            } else {
-              let type = result_array[4].slice(0, -1)
-              if (type === 'Raise') {
-                let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt + '\tInsufficient permission to operate the camera rise.')
-              } else {
-                let messageTxt = result_array[6].slice(0, -1)
-                message.error(messageTxt + '\tInsufficient permission to operate the camera lower.')
-              }
-            }
-            break
-          }
-          case 'DeckSensorAllEnable': {
-            console.log('DeckSensorAllEnable: ', received_msg)
-            let result = result_array[4].slice(0, -1)
-            if (result === 'OK') {
-              let type = result_array[3].slice(0, -1)
-              if (type === 'Enable') {
-                message.success('All deck sensors are enabled successfully.')
-              } else {
-                message.success('All deck sensors are disabled successfully.')
-              }
-            } else {
-              let type = result_array[3].slice(0, -1)
-              if (type === 'Enable') {
-                message.error('Enable all deck sensors is failed.')
-              } else {
-                message.error('Disable all deck sensors is failed.')
-              }
-            }
-            break
-          }
-          case 'DeckSensorZoneEnable': {
-            console.log('DeckSensorZoneEnable: ', received_msg)
-            let result = result_array[6].slice(0, -1)
-            if (result === 'OK') {
-              let type = result_array[5].slice(0, -1)
-              if (type === 'Enable') {
-                message.success('All deck sensors in this deck zone are enabled successfully.')
-              } else {
-                message.success('All deck sensors in this deck zone are disabled successfully.')
-              }
-            } else {
-              let type = result_array[5].slice(0, -1)
-              if (type === 'Enable') {
-                message.error('Enable all deck sensors in this deck zone is failed.')
-              } else {
-                message.error('Disable all deck sensors in this deck zone is failed.')
-              }
-            }
-            break
-          }
-        }
+    this.openSocket();
+    setTimeout(() => {
+      if (!this.socketOpened) {
+        this.openSocket()
+        message.error('Socket is disconnected! ...Please try again.')
+      } else {
+        let data = '<GetSystemInfo>'
+        this.ws.send(data)
       }
-    }
+    }, 2000);
 
-    this.ws.onclose = () => {
-      // websocket is closed.
-      console.log('Connection is closed...')
-      this.socketOpened = false
-      document.getElementById('root').style.cursor = 'default'
-    }
+
+
   }
 
   openSocket = () => {
@@ -325,6 +171,7 @@ class TopMenu extends React.Component {
                 })
                 cookie.save('SecurityLevelId', result_array[3].slice(0, -1))
                 cookie.save('SecurityLevelImage', result_array[5].slice(0, -1))
+                this.setState({ wsversion: result_array[6].slice(0, -1) })
               }
               document.getElementById('root').style.cursor = 'default'
             }
@@ -343,7 +190,6 @@ class TopMenu extends React.Component {
                 })
                 cookie.save('SecurityLevelId', result_array[3].slice(0, -1))
                 cookie.save('SecurityLevelImage', result_array[5].slice(0, -1))
-                this.setState({ wsversion: result_array[4].slice(0, -1) })
               }
             }
             break
@@ -777,7 +623,7 @@ class TopMenu extends React.Component {
               src={palladiumLogoImage}
               alt="PalladiumLogo"
             />
-            <DropDownLogo type={'PALLADIUM TECHNOLOGIES'} wsversion = {this.state.wsversion}/>
+            <DropDownLogo type={'PALLADIUM TECHNOLOGIES'} wsversion={this.state.wsversion} />
           </li>
           <li className={'securityLavel'} onClick={this.openLoginView}>
             <img
@@ -1052,7 +898,7 @@ function DropDownLogo(props) {
       </li>
       <li className={"content"}>
         <div className="dropdownlink">
-          {`web socket version : ${wsversion}`}
+          {`web-socket ${wsversion}`}
         </div>
       </li>
       <li className={"content"}>
