@@ -5,11 +5,19 @@ import Resizable from 're-resizable'
 import $ from 'jquery'
 import './style.scss'
 
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+const getEventCountsByDeviceName = (DeviceName) => gql`
+    query get {
+      DeviceEventCount(DeviceName:"${DeviceName}")
+    }
+`;
+
 let scroll_flag = true
 let update_flag = true
 let eventRow_count = 50
 let init_flag = false
-
+let eventCounts = 1
 var intval
 const mapStateToProps = (state, props) => ({
   urls: state.urls,
@@ -21,6 +29,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch: dispatch,
 })
+
 
 @connect(
   mapStateToProps,
@@ -34,8 +43,7 @@ class CameraEventView extends React.Component {
       border: 'blue',
       sortType: 'datetime',
       sortOrder: 0,
-      limit_count: 50,
-      noEventLog: false
+      limit_count: 50
     }
   }
 
@@ -146,16 +154,18 @@ class CameraEventView extends React.Component {
       let eventArray = cameraEventViewInfo.cameraEventLogs || []
       console.log("+++++++++++++++++++++++++++", eventArray)
       eventArray = eventArray.filter(e => e.SecurityDevice.DeviceName.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
+      if(eventCounts==0) clearInterval(intval);
       if (typeof eventArray === 'undefined' || eventArray.length === 0) {
 
         this.initAndGetLogs()
 
         $('#CameraEventLogView')
           .height(200)
-        this.setState({ noEventLog: true })
       } else {
         clearInterval(intval);
       }
+      
+
     }, 5000)
   }
   initTable = () => {
@@ -315,7 +325,6 @@ class CameraEventView extends React.Component {
     console.log("event logs_______________________", eventLogs)
     eventLogs = eventLogs.filter(e => e.device === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase())
     eventLogs.forEach(log => {
-      this.setState({ noEventLog: false })
       $('#CameraEventLogView')
         .width(600)
         .height(400)
@@ -361,7 +370,6 @@ class CameraEventView extends React.Component {
   renderTable = eventLogs => {
     const { cameraEventViewInfo } = this.props
     eventLogs.filter(e => e.device.toUpperCase() === cameraEventViewInfo.accessInfo.DeviceName.toUpperCase()).forEach(log => {
-      this.setState({ noEventLog: false })
       $('#CameraEventLogView')
         .width(600)
         .height(400)
@@ -415,9 +423,9 @@ class CameraEventView extends React.Component {
   }
 
   render() {
-    let { border, sortType, sortOrder, x, y, width, height, noEventLog } = this.state
+    let { border, sortType, sortOrder, x, y, width, height } = this.state
     let { cameraEventViewInfo } = this.props
-
+    console.log("event counts++++++++++++++++", eventCounts)
     // let display = cameraEventViewInfo.display ? 'block' : 'none'
     let cornerImage = ''
     if (border === 'blue') {
@@ -515,10 +523,15 @@ class CameraEventView extends React.Component {
           id={'cameraEventTableContainer'}
           onScroll={this.handleScroll}
         >
-          {noEventLog && <p className="nodevice">No events found for this device.</p>}
-          <div
-            className={'tableArea'}
-          />
+          <Query query={getEventCountsByDeviceName(cameraEventViewInfo.accessInfo && cameraEventViewInfo.accessInfo.DeviceName || "")}>            
+            {({ loading, data }) => {
+              if(!loading) eventCounts = data && data["DeviceEventCount"];              
+              return !loading && (                  
+              data && !data["DeviceEventCount"] && <p className="nodevice">No events found for this device.</p>           
+            )}}
+          </Query>       
+            {/* event count checked and show device unknown */}
+          <div className={'tableArea'} />
         </div>
         <img src={cornerImage} className="cornerImage" alt="corner" />
         <button className={'closeButton'} onClick={this.onClose} />

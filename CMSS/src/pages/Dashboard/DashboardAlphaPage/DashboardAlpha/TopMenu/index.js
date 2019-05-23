@@ -60,6 +60,8 @@ const getAllDeckZonSensor = () => gql`
   }
 `;
 
+
+
 const mapStateToProps = (state, props) => ({
   urls: state.urls,
   decks: state.decksInfo,
