@@ -1,6 +1,6 @@
 import axios from 'axios'
 import rootReducer from './redux'
-
+import { store } from '../index.js';
 const INITIAL_STATE = {
   display: false,
   cameraInfo: {},
@@ -9,7 +9,7 @@ const INITIAL_STATE = {
   cameraEventLogs: [],
 }
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'SET_CAMERA_EVENT_VIEW_DISPLAY': {
       console.log("CameraEventPopup")
@@ -22,7 +22,7 @@ export default function(state = INITIAL_STATE, action) {
     }
     case 'CLOSE_CAMERA_EVENT_VIEW_DISPLAY': {
       return {
-        ...state,        
+        ...state,
         ...(state.cameraEventLogs = []),
         ...(state.cameraInfo = {}),
         ...(state.sortType = 'datetime'),
@@ -48,7 +48,7 @@ export default function(state = INITIAL_STATE, action) {
 }
 
 export function getSecurityEventsByCameraId(cameraId, dispatch, sortType = 'datetime', order = 0) {
-  ;(INITIAL_STATE.sortType = sortType), (INITIAL_STATE.order = order)
+  ; (INITIAL_STATE.sortType = sortType), (INITIAL_STATE.order = order)
   let url = rootReducer.serverUrl + '/api/securityEvents/eventLogsByCameraId'
   let url_1 = rootReducer.serverUrl + '/api/securityEvents/countByCameraId'
   axios
@@ -107,7 +107,9 @@ function getEventLogs(url, cameraId, index, limit, page_count, sortType, order, 
           cameraEventLogs: cameraEventLogs,
         })
         index++
-        getEventLogs(url, cameraId, index, limit, page_count, sortType, order, dispatch)
+        var display = store.getState().cameraEventViewInfo.display
+        if (display)
+          getEventLogs(url, cameraId, index, limit, page_count, sortType, order, dispatch)
       }
     })
 }
