@@ -1,6 +1,6 @@
 import rootReducer from './redux'
 import axios from 'axios'
-
+import { store } from '../index.js';
 const INITIAL_STATE = {
   logHistory: [],
   deviceAttributeArray: [],
@@ -26,7 +26,7 @@ const INITIAL_STATE = {
   },
 }
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'PUSH_DATA': {
       console.log('LogHistory: ', state.logHistory)
@@ -62,7 +62,7 @@ export let getSecurityEventsByDeviceID = (
   sortType = 'datetime',
   order = 0,
 ) => {
-  ;(INITIAL_STATE.sortType = sortType), (INITIAL_STATE.order = order)
+  ; (INITIAL_STATE.sortType = sortType), (INITIAL_STATE.order = order)
   let deviceId = accessInfo.DeviceID
   let url = rootReducer.serverUrl + '/api/securityEvents/getEventsByDeviceId'
   let url_1 = rootReducer.serverUrl + '/api/securityEvents/getCountByDeviceId?'
@@ -131,7 +131,9 @@ function getEventsByDeviceId(url, index, limit, page_count, sortType, order, dev
           data: logArray,
         })
         index++
-        getEventsByDeviceId(url, index, limit, page_count, sortType, order, deviceId, dispatch)
+        var enabled = store.getState().logInfo.accessInfo.enabled
+        if (enabled)
+          getEventsByDeviceId(url, index, limit, page_count, sortType, order, deviceId, dispatch)
       }
     })
 }

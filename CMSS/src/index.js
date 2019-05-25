@@ -34,7 +34,7 @@ if (isLogger && process.env.NODE_ENV === 'development') {
   const { logger } = require('redux-logger')
   middlewares.push(logger)
 }
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(...middlewares)))
+export const store = createStore(reducer, composeWithDevTools(applyMiddleware(...middlewares)))
 ReactDOM.render(
   <Provider store={store}>
     <ApolloProvider client={client}>     

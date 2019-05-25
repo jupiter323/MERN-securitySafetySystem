@@ -169,7 +169,7 @@ exports.getSecurityEventsByDeviceId = function (req, res, next) {
             'EventID',
             'EventMsg'
         ],
-        order: [['DateTime', 'DESC']]
+        // order: [['DateTime', 'DESC']]
     };
     /*switch (sortType) {
         case 'datetime': {

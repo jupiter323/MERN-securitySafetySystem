@@ -110,7 +110,7 @@ class DeckView extends React.PureComponent {
         })
         break
       }
-      case 3: {
+      case 3: {      
         this.setState({
           cameraPopupDisplay: {
             display: 'none',

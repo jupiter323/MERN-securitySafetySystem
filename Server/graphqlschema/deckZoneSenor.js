@@ -3,6 +3,8 @@ const DeckLocationsModel = require('../models').DeckLocations;
 const DeviceModel = require('../models').SecurityDevices;
 const EquipmentTypesModel = require('../models').EquipmentTypes;
 const SecurityEventsModel = require('../models').SecurityEvents;
+const EventAttributesModel = require('../models').EventAttributes;
+const UserModel = require('../models').UserPasswords;
 const graphql = require('graphql'),
     { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList, GraphQLInt } = graphql
 
@@ -108,15 +110,55 @@ var getEventListByDeviceID = async (DeviceID) => {
     return await new Promise((resolve) => {
         SecurityEventsModel.findAll(
             {
-                where: { DeviceID:DeviceID },
+                // order: [['DateTime', 'DESC']],
+                // limit:300,
+                where: { DeviceID: DeviceID },
                 attributes:
                     [
-                        "EventID"
+                        "EventID",
+                        'EventMsg',
+                        'DateTime'
+
                     ]
             }).then(eventlist => {
                 resolve(eventlist);
             }).catch(error => {
                 console.log('error: ', 'getEventListByDeviceID not found.', error);
+                resolve([]);
+            })
+    })
+}
+var getEventAttributesByEventID = async (EventID) => {
+    return await new Promise((resolve) => {
+        EventAttributesModel.findOne(
+            {
+                where: { EventID },
+                attributes:
+                    [
+                        "AttributeValueString"              
+                    ]
+            }).then(EventAttribute => {
+                resolve(EventAttribute);
+            }).catch(error => {
+                console.log('error: ', 'getEventAttributesByEventID not found.', error);
+                resolve([]);
+            })
+    })
+}
+var userInfomationByUsername = async (Username) => {
+    return await new Promise((resolve) => {
+        UserModel.findOne(
+            {
+                where: { Username },
+                attributes:
+                    [
+                        "UserID",
+                        "UserSecurityClearance_ClearanceID"              
+                    ]
+            }).then(user => {
+                resolve(user);
+            }).catch(error => {
+                console.log('error: ', 'userInfomationByUsername not found.', error);
                 resolve([]);
             })
     })
@@ -185,6 +227,57 @@ const DeckZoneType = new GraphQLObjectType({
         }
     }
 })
+
+
+const UserPassword = new GraphQLObjectType({
+    name: 'UserPassword',
+    fields: {
+        UserID: {
+            type: GraphQLInt
+        },
+        UserSecurityClearance_ClearanceID: {
+            type: GraphQLInt
+        }
+    }
+})
+
+const EventAttribute = new GraphQLObjectType({
+    name: 'EventAttribute',
+    fields: {
+        AttributeValueString: {
+            type: GraphQLString
+        },
+        UserPassword: {
+            type: UserPassword,
+            resolve(parent, args) {
+                return userInfomationByUsername(parent.AttributeValueString)
+            }
+        }
+    }
+})
+
+const LogEvent = new GraphQLObjectType({
+    name: 'LogEvent',
+    fields: {
+        DateTime: {
+            type: GraphQLString
+        },
+        EventAttribute: {
+            type: EventAttribute,
+            resolve(parent, args) {
+                return getEventAttributesByEventID(parent.EventID)
+            }
+
+        },
+        EventID: {
+            type: GraphQLInt
+        },
+        EventMsg: {
+            type: GraphQLString
+        }
+    }
+})
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -200,14 +293,18 @@ const RootQuery = new GraphQLObjectType({
             args: { DeviceName: { type: GraphQLID } },
             async resolve(parent, args) {
                 let DeviceID = await getDeviceIdByName(args.DeviceName);
-                let EventList =await getEventListByDeviceID(DeviceID);
+                let EventList = await getEventListByDeviceID(DeviceID);
                 let EventCounts = EventList.length;
                 return EventCounts
             }
+        },
+        LogEvents: {
+            type: new GraphQLList(LogEvent),
+            args: { DeviceID: { type: GraphQLInt } },
+            resolve(parent, args) {
+                return getEventListByDeviceID(args.DeviceID)
+            }
         }
-        // DeckSensors: {
-        //     type: new GraphQLList()
-        // }
     }
 })
 module.exports = new GraphQLSchema({
