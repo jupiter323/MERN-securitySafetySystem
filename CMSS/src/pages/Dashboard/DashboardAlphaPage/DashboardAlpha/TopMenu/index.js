@@ -11,8 +11,9 @@ import { message } from 'antd'
 import { Card, Col, Row } from 'antd'
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-
+import DropDownNumKeyPad from './DropDownNumKeyPad';
 import _ from "lodash"
+
 
 let solarisLogo = 'resources/images/logo/4.png'
 let customViewImage = 'resources/images/icons/SVG/View Layout Icon.svg'
@@ -27,23 +28,7 @@ let droneImage = 'resources/images/icons/SVG/Drone Icon.svg'
 let eventLogImage = 'resources/images/icons/SVG/Event Log Icon.svg'
 let numKeyPadImage = 'resources/images/icons/SVG/Keypad Icon.svg'
 let palladiumLogoImage = 'resources/images/icons/SVG/Palladium Logo.svg'
-let num0Image = 'resources/images/icons/SVG/0 Button.svg'
-let num1Image = 'resources/images/icons/SVG/1 Button.svg'
-let num2Image = 'resources/images/icons/SVG/2 Button.svg'
-let num3Image = 'resources/images/icons/SVG/3 Button.svg'
-let num4Image = 'resources/images/icons/SVG/4 Button.svg'
-let num5Image = 'resources/images/icons/SVG/5 Button.svg'
-let num6Image = 'resources/images/icons/SVG/6 Button.svg'
-let num7Image = 'resources/images/icons/SVG/7 Button.svg'
-let num8Image = 'resources/images/icons/SVG/8 Button.svg'
-let num9Image = 'resources/images/icons/SVG/9 Button.svg'
-let backImage = 'resources/images/icons/SVG/Back Button.svg'
-let enterImage = 'resources/images/icons/SVG/Enter Button.svg'
-let ownersCitadelSLockedImage = 'resources/images/icons/SVG/Owners Citadel Button Selected-Locked.svg'
-let generalCitadelSLockedImage = 'resources/images/icons/SVG/General Citadel Button Selected-Locked.svg'
-let normalOpSLocked = 'resources/images/icons/SVG/Normal Op Button Selected-Locked.svg'
-let acknowledgeSLocked = 'resources/images/icons/SVG/Acknowledge Button Selected-Locked.svg'
-let emergencySLocked = 'resources/images/icons/SVG/Emergency DACS Button Selected-Locked.svg'
+
 const getAllDeckZonSensor = () => gql`
   query get {
     DeckZones {       
@@ -96,7 +81,6 @@ class TopMenu extends React.Component {
     securitySettingDisplay: 'none',
     userName: '',
     password: '',
-    keyboardInputValue: '',
     wsversion: ""
   }
 
@@ -111,7 +95,8 @@ class TopMenu extends React.Component {
         message.error('Socket is disconnected! ...Please try again.')
       } else {
         let data = '<GetSystemInfo>'
-        this.ws.send(data)
+        this.ws.send(data);
+        this.onKeypadQueryButtonMode();
       }
     }, 2000);
 
@@ -193,6 +178,131 @@ class TopMenu extends React.Component {
               }
             }
             break
+          }
+          case 'KeypadValidateUser': {
+            console.log('KeypadValidateUser: ', received_msg)
+            let result = result_array[2].slice(0, -1)
+            if (result === 'OK') {
+              let { dispatch } = this.props
+              dispatch({
+                type: 'SET_Number_Key_passed',
+                numberkeypassed: true,
+              })
+              // localStorage.setItem("numberkeypassed", "1");
+              message.info("Your number passed as well")
+            } else {
+              let error = result_array[3].slice(0, -1)
+              message.error(error);
+            }
+            break;
+          }
+          case 'KeypadQueryButtonMode': {
+            console.log('KeypadQueryButtonMode: ', received_msg)
+            let result = result_array[2].slice(0, -1)
+            if (result === 'OK') {
+              let { dispatch } = this.props;
+              let buttons_mode = [
+                {
+                  key: "general",
+                  text: result_array[3] ? result_array[3].slice(0, -1) : null,
+                  value: result_array[4] ? result_array[4].slice(0, -1) : null
+                },
+                {
+                  key: "normal",
+                  text: result_array[5] ? result_array[5].slice(0, -1) : null,
+                  value: result_array[6] ? result_array[6].slice(0, -1) : null
+                },
+                {
+                  key: "owner",
+                  text: result_array[7] ? result_array[7].slice(0, -1) : null,
+                  value: result_array[8] ? result_array[8].slice(0, -1) : null
+                },
+                {
+                  key: "emergency",
+                  text: result_array[9] ? result_array[9].slice(0, -1) : null,
+                  value: result_array[10] ? result_array[10].slice(0, -1) : null
+                },
+              ]
+              dispatch({
+                type: 'SET_Number_Key_button_mode',
+                buttonsmode: buttons_mode,
+              })
+
+            } else {
+              let error = result_array[3].slice(0, -1)
+              message.error(error);
+            }
+            break;
+          }
+          case 'KeypadActivateButton': {
+            console.log('KeypadActivateButton: ', received_msg)
+            let result = result_array[2].slice(0, -1)
+            if (result === 'OK') {
+              let { dispatch } = this.props
+              let buttons_mode = [
+                {
+                  key: "general",
+                  text: result_array[3] ? result_array[3].slice(0, -1) : null,
+                  value: result_array[4] ? result_array[4].slice(0, -1) : null
+                },
+                {
+                  key: "normal",
+                  text: result_array[5] ? result_array[5].slice(0, -1) : null,
+                  value: result_array[6] ? result_array[6].slice(0, -1) : null
+                },
+                {
+                  key: "owner",
+                  text: result_array[7] ? result_array[7].slice(0, -1) : null,
+                  value: result_array[8] ? result_array[8].slice(0, -1) : null
+                },
+                {
+                  key: "emergency",
+                  text: result_array[9] ? result_array[9].slice(0, -1) : null,
+                  value: result_array[10] ? result_array[10].slice(0, -1) : null
+                },
+              ]
+              dispatch({
+                type: 'SET_Number_Key_button_mode',
+                buttonsmode: buttons_mode,
+              })
+              message.info("Your number activate button succeed")
+            } else {
+              let error = result_array[3].slice(0, -1)
+              message.error(error);
+            }
+            break;
+          }
+          case 'Alarm': {
+            console.log('Alarm: ', received_msg)
+            let result = result_array[2].slice(0, -1)
+            if (result === 'OK') {
+              // let { dispatch } = this.props
+              // dispatch({
+              //   type: 'SET_Number_Key_passed',
+              //   numberkeypassed: true,
+              // })
+              message.info("You received the Alarm")
+            } else {
+              let error = result_array[3].slice(0, -1)
+              message.error(error);
+            }
+            break;
+          }
+          case 'KeypadAlarmAcknowledge': {
+            console.log('KeypadAlarmAcknowledge: ', received_msg)
+            let result = result_array[2].slice(0, -1)
+            if (result === 'OK') {
+              let { dispatch } = this.props
+              dispatch({
+                type: 'SET_Number_Key_acknowledged_alarm',
+                acknowledgedAlarm: true,
+              })
+              message.info("Acknowledged active alarms")
+            } else {
+              let error = result_array[3].slice(0, -1)
+              message.error(error);
+            }
+            break;
           }
         }
       }
@@ -498,12 +608,54 @@ class TopMenu extends React.Component {
     addSensorView()
   }
 
-  handleKeyboardInput = async (key) => {
-    let { keyboardInputValue } = this.state
-    if (key === "-1") return this.setState({ keyboardInputValue: keyboardInputValue.substring(0, keyboardInputValue.length - 1) })
-    if (key === "-2") return message.info("completed number input as " + this.state.keyboardInputValue);
-    this.setState({ keyboardInputValue: keyboardInputValue + key });
+  onKeypadValidateUser = (code) => {
+    let { dispatch } = this.props
+    let username = cookie.load('UserName');
+    let data = `<KeypadValidateUser><${username}><${code}>`
+    dispatch({
+      type: 'SET_Number_Key',
+      code: code,
+    })
+    if (!this.socketOpened) {
+      this.openSocket()
+      message.error('Socket is disconnected! ...Please try again.')
+    } else {
+      this.ws.send(data)
+    }
   }
+
+  onKeypadQueryButtonMode = () => {
+    let data = '<KeypadQueryButtonMode>'
+    if (!this.socketOpened) {
+      this.openSocket()
+      message.error('Socket is disconnected! ...Please try again.')
+    } else {
+      this.ws.send(data)
+    }
+  }
+
+  onActivateButton = (code, labelTxt) => {
+    let username = cookie.load('UserName');
+    let data = `<KeypadActivateButton><${username}><${code}><${labelTxt}>`
+    if (!this.socketOpened) {
+      this.openSocket()
+      message.error('Socket is disconnected! ...Please try again.')
+    } else {
+      this.ws.send(data)
+    }
+  }
+  onAcknowledgeAlarmActive = (code) => {
+    let username = cookie.load('UserName');
+    let data = `<KeypadAlarmAcknowledge><${username}><${code}>`    
+    if (!this.socketOpened) {
+      this.openSocket()
+      message.error('Socket is disconnected! ...Please try again.')
+    } else {
+      this.ws.send(data)
+    }
+  }
+
+
 
   render() {
     let { decks, devices, deckLocations, urls, accessInfo, deckZonesInfo, systemInfo } = this.props
@@ -615,7 +767,7 @@ class TopMenu extends React.Component {
           </li>
           <li>
             <img className="menuItemImage" src={numKeyPadImage} alt="NumKeyPad" />
-            <DropDownNumKeyPad type={'KEY PAD'} handleKeyboardInput={this.handleKeyboardInput} keyboardInputValue={this.state.keyboardInputValue} />
+            <DropDownNumKeyPad type={'KEY PAD'} onKeypadValidateUser={this.onKeypadValidateUser} onActivateButton={this.onActivateButton} onAcknowledgeAlarmActive={this.onAcknowledgeAlarmActive} />
           </li>
           <li className={'palladiumLogo'}>
             <img
@@ -729,161 +881,7 @@ function DropDown(props) {
     </ul>
   )
 }
-function DropDownNumKeyPad(props) {
-  let { handleKeyboardInput, keyboardInputValue } = props
-  return (
-    <ul className="dropdown numkeypad p-1">
-      <div className="row w-100 m-0 top-row-num">
-        <div className="col p-0 h-100">
-          <div className="row m-0 top-row-digit">
-            <div className="sub-content w-100 m-2">
-              <label className="title">
-                {
-                  keyboardInputValue.split("").map((e, i) => i > 5 ? "" : "*")
-                }
-              </label>
-            </div>
-          </div>
-          <div className="row m-0 top-row-message h-75">
-            <div className="sub-content w-100 m-2">
-            </div>
-          </div>
-        </div>
-        <div className="col p-0 h-100">
-          <div className="row m-0 w-100 p-0">
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("1") }}>
-              <img
-                className="m-0"
-                src={num1Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("2") }}>
-              <img
-                className="m-0"
-                src={num2Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("3") }}>
-              <img
-                className="m-0"
-                src={num3Image}
-                alt="SecurityLevel"
-              />
-            </div>
-          </div>
-          <div className="row m-0 w-100 p-0">
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("4") }}>
-              <img
-                className="m-0"
-                src={num4Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("5") }}>
-              <img
-                className="m-0"
-                src={num5Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("6") }}>
-              <img
-                className="m-0"
-                src={num6Image}
-                alt="SecurityLevel"
-              />
-            </div>
-          </div>
-          <div className="row m-0 w-100 p-0">
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("7") }}>
-              <img
-                className="m-0"
-                src={num7Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("8") }}>
-              <img
-                className="m-0"
-                src={num8Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("9") }}>
-              <img
-                className="m-0"
-                src={num9Image}
-                alt="SecurityLevel"
-              />
-            </div>
-          </div>
-          <div className="row m-0 w-100 p-0">
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("0") }}>
-              <img
-                className="m-0"
-                src={num0Image}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("-1") }}>
-              <img
-                className="m-0"
-                src={backImage}
-                alt="SecurityLevel"
-              />
-            </div>
-            <div className="col-4 m-0 p-0 h-100" onClick={() => { handleKeyboardInput("-2") }}>
-              <img
-                className="m-0"
-                src={enterImage}
-                alt="SecurityLevel"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row w-100 m-0">
-        <div className="col p-0 m-0 h-100">
-          <img
-            className="m-0"
-            src={ownersCitadelSLockedImage}
-            alt="SecurityLevel"
-          />
-        </div>
-        <div className="col p-0 m-0 h-100">
-          <img
-            className="m-0"
-            src={generalCitadelSLockedImage}
-            alt="SecurityLevel"
-          />
-        </div>
-        <div className="col p-0 m-0 h-100">
-          <img
-            className="m-0"
-            src={normalOpSLocked}
-            alt="SecurityLevel"
-          />
-        </div>
-        <div className="col p-0 m-0 h-100">
-          <img
-            className="m-0"
-            src={emergencySLocked}
-            alt="SecurityLevel"
-          />
-        </div>
-        <div className="col p-0 m-0 h-100">
-          <img
-            className="m-0"
-            src={acknowledgeSLocked}
-            alt="SecurityLevel"
-          />
-        </div>
-      </div>
-    </ul>
-  )
-}
+
 function DropDownLogo(props) {
   let { type, wsversion } = props
   return (
