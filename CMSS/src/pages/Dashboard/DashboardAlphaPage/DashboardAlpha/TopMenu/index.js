@@ -203,25 +203,25 @@ class TopMenu extends React.Component {
               let { dispatch } = this.props;
               let buttons_mode = [
                 {
-                  key: "general",
+                  key: "emergency",
                   text: result_array[3] ? result_array[3].slice(0, -1) : null,
                   value: result_array[4] ? result_array[4].slice(0, -1) : null
                 },
                 {
-                  key: "normal",
+                  key: "general",
                   text: result_array[5] ? result_array[5].slice(0, -1) : null,
                   value: result_array[6] ? result_array[6].slice(0, -1) : null
                 },
                 {
-                  key: "owner",
+                  key: "normal",
                   text: result_array[7] ? result_array[7].slice(0, -1) : null,
                   value: result_array[8] ? result_array[8].slice(0, -1) : null
                 },
                 {
-                  key: "emergency",
+                  key: "owner",
                   text: result_array[9] ? result_array[9].slice(0, -1) : null,
                   value: result_array[10] ? result_array[10].slice(0, -1) : null
-                },
+                }
               ]
               dispatch({
                 type: 'SET_Number_Key_button_mode',
@@ -241,25 +241,26 @@ class TopMenu extends React.Component {
               let { dispatch } = this.props
               let buttons_mode = [
                 {
-                  key: "general",
+                  key: "emergency",
                   text: result_array[3] ? result_array[3].slice(0, -1) : null,
                   value: result_array[4] ? result_array[4].slice(0, -1) : null
                 },
                 {
-                  key: "normal",
+                  key: "general",
                   text: result_array[5] ? result_array[5].slice(0, -1) : null,
                   value: result_array[6] ? result_array[6].slice(0, -1) : null
                 },
                 {
-                  key: "owner",
+                  key: "normal",
                   text: result_array[7] ? result_array[7].slice(0, -1) : null,
                   value: result_array[8] ? result_array[8].slice(0, -1) : null
                 },
                 {
-                  key: "emergency",
+                  key: "owner",
                   text: result_array[9] ? result_array[9].slice(0, -1) : null,
                   value: result_array[10] ? result_array[10].slice(0, -1) : null
-                },
+                }
+
               ]
               dispatch({
                 type: 'SET_Number_Key_button_mode',
