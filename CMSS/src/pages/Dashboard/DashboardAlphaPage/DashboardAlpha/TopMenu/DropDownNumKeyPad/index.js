@@ -16,36 +16,36 @@ import num9Image from 'assets/img/numkeypad/9 Button.svg'
 import backImage from 'assets/img/numkeypad/Back Button.svg'
 import enterImage from 'assets/img/numkeypad/Enter Button.svg'
 
-import ownersCitadelLockedImage from 'assets/img/numkeypad/Owners Citadel Button Locked.svg'
-import ownersCitadelSLockedImage from 'assets/img/numkeypad/Owners Citadel Button Selected-Locked.svg'
-import ownersCitadelSImage from 'assets/img/numkeypad/Owners Citadel Button Selected.svg'
-import ownersCitadelULockedImage from 'assets/img/numkeypad/Owners Citadel Button Unlocked.svg'
+// import ownersCitadelLockedImage from 'assets/img/numkeypad/Owners Citadel Button Locked.svg'
+// import ownersCitadelSLockedImage from 'assets/img/numkeypad/Owners Citadel Button Selected-Locked.svg'
+// import ownersCitadelSImage from 'assets/img/numkeypad/Owners Citadel Button Selected.svg'
+// import ownersCitadelULockedImage from 'assets/img/numkeypad/Owners Citadel Button Unlocked.svg'
 
-import generalCitadelLockedImage from 'assets/img/numkeypad/General Citadel Button Locked.svg'
-import generalCitadelSLockedImage from 'assets/img/numkeypad/General Citadel Button Selected-Locked.svg'
-import generalCitadelSImage from 'assets/img/numkeypad/General Citadel Button Selected.svg'
-import generalCitadelULockedImage from 'assets/img/numkeypad/General Citadel Button Unlocked.svg'
+// import generalCitadelLockedImage from 'assets/img/numkeypad/General Citadel Button Locked.svg'
+// import generalCitadelSLockedImage from 'assets/img/numkeypad/General Citadel Button Selected-Locked.svg'
+// import generalCitadelSImage from 'assets/img/numkeypad/General Citadel Button Selected.svg'
+// import generalCitadelULockedImage from 'assets/img/numkeypad/General Citadel Button Unlocked.svg'
 
-import normalOpLocked from 'assets/img/numkeypad/Normal Op Button Locked.svg'
-import normalOpSLocked from 'assets/img/numkeypad/Normal Op Button Selected-Locked.svg'
-import normalOpS from 'assets/img/numkeypad/Normal Op Button Selected.svg'
-import normalOpULocked from 'assets/img/numkeypad/Normal Op Button Unlocked.svg'
+// import normalOpLocked from 'assets/img/numkeypad/Normal Op Button Locked.svg'
+// import normalOpSLocked from 'assets/img/numkeypad/Normal Op Button Selected-Locked.svg'
+// import normalOpS from 'assets/img/numkeypad/Normal Op Button Selected.svg'
+// import normalOpULocked from 'assets/img/numkeypad/Normal Op Button Unlocked.svg'
 
-import emergencyLocked from 'assets/img/numkeypad/Emergency DACS Button Locked.svg'
-import emergencySLocked from 'assets/img/numkeypad/Emergency DACS Button Selected-Locked.svg'
-import emergencyS from 'assets/img/numkeypad/Emergency DACS Button Selected.svg'
-import emergencyULocked from 'assets/img/numkeypad/Emergency DACS Button Unlocked.svg'
+// import emergencyLocked from 'assets/img/numkeypad/Emergency DACS Button Locked.svg'
+// import emergencySLocked from 'assets/img/numkeypad/Emergency DACS Button Selected-Locked.svg'
+// import emergencyS from 'assets/img/numkeypad/Emergency DACS Button Selected.svg'
+// import emergencyULocked from 'assets/img/numkeypad/Emergency DACS Button Unlocked.svg'
 
-import acknowledgeLocked from 'assets/img/numkeypad/Acknowledge Button Locked.svg'
-import acknowledgeSLocked from 'assets/img/numkeypad/Acknowledge Button Selected-Locked.svg'
-import acknowledgeS from 'assets/img/numkeypad/Acknowledge Button Selected.svg'
-import acknowledgeULocked from 'assets/img/numkeypad/Acknowledge Button Unlocked.svg'
+// import acknowledgeLocked from 'assets/img/numkeypad/Acknowledge Button Locked.svg'
+// import acknowledgeSLocked from 'assets/img/numkeypad/Acknowledge Button Selected-Locked.svg'
+// import acknowledgeS from 'assets/img/numkeypad/Acknowledge Button Selected.svg'
+// import acknowledgeULocked from 'assets/img/numkeypad/Acknowledge Button Unlocked.svg'
 
-var ownersImage
-var generalImage
-var normalImage
-var emergencyImage
-var acknowledgeImage
+// var ownersImage
+// var generalImage
+// var normalImage
+// var emergencyImage
+// var acknowledgeImage
 
 let scroll_flag = true
 let update_flag = true
@@ -224,19 +224,20 @@ export default class DropDownNumKeyPad extends React.Component {
         var buttonmodeJson = this.buttonModearrayToJson(buttonsmode)
         console.log("number key passed: ", numberkeypassed, buttonsmode, buttonmodeJson)
 
-        if (numberkeypassed) {//unlocked
-            ownersImage = buttonmodeJson['owner'] ? ownersCitadelSImage : ownersCitadelULockedImage
-            generalImage = buttonmodeJson['general'] ? generalCitadelSImage : generalCitadelULockedImage
-            normalImage = buttonmodeJson['normal'] ? normalOpS : normalOpULocked
-            emergencyImage = buttonmodeJson['emergency'] ? emergencyS : emergencyULocked
-            acknowledgeImage = acknowledgedAlarm ? acknowledgeS : acknowledgeULocked
-        } else { //locked
-            ownersImage = buttonmodeJson['owner'] ? ownersCitadelSLockedImage : ownersCitadelLockedImage
-            generalImage = buttonmodeJson['general'] ? generalCitadelSLockedImage : generalCitadelLockedImage
-            normalImage = buttonmodeJson['normal'] ? normalOpSLocked : normalOpLocked
-            emergencyImage = buttonmodeJson['emergency'] ? emergencySLocked : emergencyLocked
-            acknowledgeImage = acknowledgedAlarm ? acknowledgeSLocked : acknowledgeLocked
-        }
+
+        // if (numberkeypassed) {//unlocked
+        //     ownersImage = buttonmodeJson['owner'] ? ownersCitadelSImage : ownersCitadelULockedImage
+        //     generalImage = buttonmodeJson['general'] ? generalCitadelSImage : generalCitadelULockedImage
+        //     normalImage = buttonmodeJson['normal'] ? normalOpS : normalOpULocked
+        //     emergencyImage = buttonmodeJson['emergency'] ? emergencyS : emergencyULocked
+        //     acknowledgeImage = acknowledgedAlarm ? acknowledgeS : acknowledgeULocked
+        // } else { //locked
+        //     ownersImage = buttonmodeJson['owner'] ? ownersCitadelSLockedImage : ownersCitadelLockedImage
+        //     generalImage = buttonmodeJson['general'] ? generalCitadelSLockedImage : generalCitadelLockedImage
+        //     normalImage = buttonmodeJson['normal'] ? normalOpSLocked : normalOpLocked
+        //     emergencyImage = buttonmodeJson['emergency'] ? emergencySLocked : emergencyLocked
+        //     acknowledgeImage = acknowledgedAlarm ? acknowledgeSLocked : acknowledgeLocked
+        // }
         return (
             <ul className="dropdown numkeypad p-1">
                 <div className="row w-100 m-0 top-row-num">
@@ -361,39 +362,47 @@ export default class DropDownNumKeyPad extends React.Component {
                 </div>
                 <div className="row w-100 m-0">
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("owner")}>
-                        <img
+                        {/* <img
                             className="m-0"
                             src={ownersImage}
                             alt="owner"
-                        />
+                        /> */}
+                        <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['owner']} btnTxt={["OWNER'S", "CITADEL", "MODE"]} />
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("general")} >
-                        <img
+                        {/* <img
                             className="m-0"
                             src={generalImage}
                             alt="general"
-                        />
+                        /> */}
+                        <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['general']} btnTxt={["GENERAL", "CITADEL", "MODE"]} />
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("normal")}>
-                        <img
+                        {/* <img
                             className="m-0"
                             src={normalImage}
                             alt="normal"
-                        />
+                        /> */}
+                        <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['normal']} btnTxt={["NORMAL", "OPERATING", "MODE"]} />
+
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("emergency")}>
-                        <img
+                        {/* <img
                             className="m-0"
                             src={emergencyImage}
                             alt="emergency"
-                        />
+                        /> */}
+                        <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['emergency']} btnTxt={["EMERGENCY", "DACS LOCKS", "OVERRIDE"]} />
+
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("acknowledge")}>
-                        <img
+                        {/* <img
                             className="m-0"
                             src={acknowledgeImage}
                             alt="acknowledge"
-                        />
+                        /> */}
+                        <AcknowledgeAlarm numberkeypassed={numberkeypassed} state={acknowledgedAlarm} btnTxt={["ACKNOWLEDGE", "ALARM"]} />
+
                     </div>
                 </div>
             </ul>
@@ -401,4 +410,41 @@ export default class DropDownNumKeyPad extends React.Component {
     }
 
 }
+
+function ControlButton(props) {
+    var { state, numberkeypassed, btnTxt } = props
+    var classname = (numberkeypassed ? state ? 'ulocked-active' : 'ulocked-inactive' : state ? 'locked-active' : 'locked-inactive') + " -button"
+    return (
+        <div className={classname} >
+            <div className="wrap-text">
+                <p className="p-0 m-0">
+                    {btnTxt[0]}
+                </p >
+                <p className="p-0 m-0">
+                    {btnTxt[1]}
+                </p>
+                <p className="p-0 m-0">
+                    {btnTxt[2]}
+                </p>
+            </div>
+        </div >
+    )
+}
+function AcknowledgeAlarm(props) {
+    var { state, numberkeypassed, btnTxt } = props
+    var classname = (numberkeypassed ? state ? 'ack-ulocked-active' : 'ack-ulocked-inactive' : state ? 'ack-locked-active' : 'ack-locked-inactive') + " ack-button"
+    return (
+        <div className={classname} >
+            <div className="wrap-text">
+                <p className="p-0 m-0">
+                    {btnTxt[0]}
+                </p >
+                <p className="p-0 m-0">
+                    {btnTxt[1]}
+                </p>
+            </div>
+        </div >
+    )
+}
+
 

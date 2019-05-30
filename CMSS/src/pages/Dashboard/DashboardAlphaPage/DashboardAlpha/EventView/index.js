@@ -43,9 +43,9 @@ class EventView extends React.Component {
     //this.initTable();
     let { dispatch } = this.props
     getAllSecurityEvents(dispatch, 'datetime', 0)
-      // $('#eventTableContainer').find('.tableArea').mousedown(() => {
-      //     this.handleMouseDown()
-      // });
+    // $('#eventTableContainer').find('.tableArea').mousedown(() => {
+    //     this.handleMouseDown()
+    // });
   }
 
   componentDidUpdate() {
@@ -67,25 +67,25 @@ class EventView extends React.Component {
     getAllSecurityEvents(dispatch, 'datetime', 0)
   }
 
-    handleMouseDown = (e) => {
-        e.stopPropagation();
-        console.log("handleMouseDown: ", e.pageY);
-        scroll_start = true;
-        cur_pos = e.pageY;
-    }
+  handleMouseDown = (e) => {
+    e.stopPropagation();
+    console.log("handleMouseDown: ", e.pageY);
+    scroll_start = true;
+    cur_pos = e.pageY;
+  }
 
-    handleMouseDrag = (e) => {
-      if(scroll_start) {
-        let temp_pos = e.pageY;
-        let cur_scroll = $('#eventTableContainer').scrollTop();
-        $('#eventTableContainer').scrollTop(cur_scroll - temp_pos + cur_pos);
-        cur_pos = temp_pos;
-      }
+  handleMouseDrag = (e) => {
+    if (scroll_start) {
+      let temp_pos = e.pageY;
+      let cur_scroll = $('#eventTableContainer').scrollTop();
+      $('#eventTableContainer').scrollTop(cur_scroll - temp_pos + cur_pos);
+      cur_pos = temp_pos;
     }
+  }
 
-    handleMouseUp = (e) => {
-      scroll_start = false;
-    }
+  handleMouseUp = (e) => {
+    scroll_start = false;
+  }
 
   updateLatest = (latestLogs, latest_time) => {
     let { sortType, sortOrder } = this.state
@@ -248,7 +248,7 @@ class EventView extends React.Component {
       if (typeof eventArray !== 'undefined' && eventArray.length > 0) {
         count = eventRow_count + 50 > eventArray.length ? eventArray.length : eventRow_count + 50
         cur_eventArray = eventArray.slice(eventRow_count, count)
-        if(eventRow_count >= count) {
+        if (eventRow_count >= count) {
           message.warning("Load all event view data.");
           return;
         }
@@ -302,20 +302,20 @@ class EventView extends React.Component {
       }
       let new_row = $(
         `<div class="` +
-          className +
-          `">
+        className +
+        `">
                   <div class="col-3 eventItem">` +
-          log.eventType +
-          `</div>
+        log.eventType +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.datetime +
-          `</div>
+        log.datetime +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.location +
-          `</div>
+        log.location +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.device +
-          `</div>
+        log.device +
+        `</div>
                 </div>`,
       )
       $('#eventTableContainer')
@@ -343,20 +343,20 @@ class EventView extends React.Component {
       }
       let new_row = $(
         `<div class="` +
-          className +
-          `">
+        className +
+        `">
                   <div class="col-3 eventItem">` +
-          log.eventType +
-          `</div>
+        log.eventType +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.datetime +
-          `</div>
+        log.datetime +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.location +
-          `</div>
+        log.location +
+        `</div>
                   <div class="col-3 eventItem">` +
-          log.device +
-          `</div>
+        log.device +
+        `</div>
                 </div>`,
       )
       $('#eventTableContainer')
@@ -374,9 +374,9 @@ class EventView extends React.Component {
 
     return (
       <div
-          className="EventLogView"
-          onMouseMove={this.handleMouseDrag}
-          onMouseUp={this.handleMouseUp}
+        className="EventLogView"
+        onMouseMove={this.handleMouseDrag}
+        onMouseUp={this.handleMouseUp}
       >
         <div className={'captionArea'}>EVENT LOG</div>
         <div className={'sortArea'}>
@@ -389,10 +389,10 @@ class EventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Event Time</span>
           </div>
           <div
@@ -404,10 +404,10 @@ class EventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Event Type</span>
           </div>
           <div
@@ -419,10 +419,10 @@ class EventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Location</span>
           </div>
           <div
@@ -434,10 +434,10 @@ class EventView extends React.Component {
                 <i className="fa fa-caret-down" />
               </span>
             ) : (
-              <span className={'icon'}>
-                <i className="fa fa-caret-right" />
-              </span>
-            )}
+                <span className={'icon'}>
+                  <i className="fa fa-caret-right" />
+                </span>
+              )}
             <span className={'sortType'}>Device Type</span>
           </div>
         </div>
@@ -449,10 +449,10 @@ class EventView extends React.Component {
         </div>
         <div className={'mainContainer'} id={'eventTableContainer'} onScroll={this.handleScroll}>
           <div
-              className={'tableArea'}
-              onMouseDown={this.handleMouseDown}
-              // onMouseMove={this.handleMouseDrag}
-              // onMouseUp={this.handleMouseUp}
+            className={'tableArea'}
+            onMouseDown={this.handleMouseDown}
+          // onMouseMove={this.handleMouseDrag}
+          // onMouseUp={this.handleMouseUp}
           />
         </div>
         <img src={cornerImage} className="cornerImage" alt="corner" />
