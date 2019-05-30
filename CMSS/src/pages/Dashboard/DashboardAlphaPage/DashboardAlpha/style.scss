@@ -1,5 +1,10 @@
 @import '../../../../resources/mixins';
-
+@font-face {
+  font-family: 'EurostileBold';
+  src: url('../../../../assets/fonts/EurostileBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: bold;
+}
 .DeckViewContainer {
   z-index: 100;
 }
