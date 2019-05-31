@@ -202,6 +202,7 @@
                 -ms-user-select: none;
                 /* Internet Explorer/Edge */
                 user-select: none;
+                text-align: left;
 
 
                 .eventRow {
@@ -219,7 +220,8 @@
 
                 :hover {
                     .eventItem {
-                        color: purple;
+                        // color: purple;
+                        font-style: italic;
                     }
 
                 }

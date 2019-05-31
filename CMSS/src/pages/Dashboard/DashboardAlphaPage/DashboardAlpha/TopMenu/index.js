@@ -294,10 +294,15 @@ class TopMenu extends React.Component {
             let result = result_array[2].slice(0, -1)
             if (result === 'OK') {
               let { dispatch } = this.props
+              dispatch({ //init alarm messages
+                type: 'SET_Alarm_message',
+                alarmMessages: []
+              })
               dispatch({
                 type: 'SET_Number_Key_acknowledged_alarm',
                 acknowledgedAlarm: true,
               })
+              
               message.info("Acknowledged active alarms")
             } else {
               let error = result_array[3].slice(0, -1)

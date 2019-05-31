@@ -50,7 +50,34 @@ export default class DropDownNumKeyPad extends React.Component {
 
     componentWillReceiveProps(next) {
         // if (!init_table_flag)
+        var { numberkey, dispatch } = next
+        var { alarmMessages, acknowledgedAlarm } = numberkey;
+        if (acknowledgedAlarm)
+            dispatch({
+                type: 'SET_Number_Key_acknowledged_alarm',
+                acknowledgedAlarm: false,
+            })
+        if (alarmMessages.length) {
+            this.setState({ receivedAlarmMessage: true });
+            this.visibleThis();
+        } else {
+            this.setState({ receivedAlarmMessage: false });
+            // this.hiddenThis()
+        }
+
         this.initTable(next)
+    }
+    visibleThis() {
+        $('.numkeypad')
+            .css('visibility', 'visible')
+            .css('opacity', '1')
+            .css('z-index', '1000')
+    }
+    hiddenThis() {
+        $('.numkeypad')
+            .css('visibility', 'hidden')           
+            .css('opacity', '0')
+            .css('z-index', '0')
     }
     componentWillUnmount() {
         $('#messageContainer')
@@ -100,7 +127,14 @@ export default class DropDownNumKeyPad extends React.Component {
         var { numberkeypassed, buttonsmode, code } = numberkey
         var { receivedAlarmMessage } = this.state
         if (!numberkeypassed) return; // unloacked
-        if (key === 'acknowledge') return (receivedAlarmMessage ? onAcknowledgeAlarmActive(code) : null) //acknowledge alarms
+        if (key === 'acknowledge') { // acknowledge button clicked
+            if (receivedAlarmMessage) { //if there is received alarm messages
+                this.hiddenThis()
+                onAcknowledgeAlarmActive(code)
+            }
+
+            return  //acknowledge alarms
+        }
 
         var buttonmodeJson = this.buttonModearrayToJson(buttonsmode)
         let buttonMode = buttonsmode.filter(e => e['key'] === key)[0]
@@ -152,8 +186,8 @@ export default class DropDownNumKeyPad extends React.Component {
     initTable = async (next) => {
         var { numberkey } = next
         var { alarmMessages } = numberkey
+
         init_table_flag = true
-        if (alarmMessages.length) await this.setState({ receivedAlarmMessage: true })
         let limit_count = 50
         let count = limit_count > alarmMessages.length ? alarmMessages.length : limit_count
         let start = 0
@@ -168,12 +202,16 @@ export default class DropDownNumKeyPad extends React.Component {
             row.msg = event.msg.toUpperCase()
             renderAlarmMessages.push(row)
         })
-        this.renderTable(renderAlarmMessages)
+
         if ($('#messageContainer')) {
-            $('#messageContainer')
+            await $('#messageContainer')
                 .find('.tableArea')
                 .css('display', 'block')
+            await $('#messageContainer')
+                .find('.tableArea')
+                .empty();
         }
+        this.renderTable(renderAlarmMessages)
     }
 
     renderTable = alarmMessages => {
@@ -190,6 +228,7 @@ export default class DropDownNumKeyPad extends React.Component {
                     </div>
                 </div>`,
             )
+
             $('#messageContainer')
                 .find('.tableArea')
                 .append(new_row)
@@ -223,11 +262,11 @@ export default class DropDownNumKeyPad extends React.Component {
                                 <div className="AlarmMessageView">
                                     <div className={'messageTitle'}>MESSAGES</div>
                                     <div id={'messageContainer'} onScroll={this.handleScroll}>
-                                        {receivedAlarmMessage? <div
+                                        {receivedAlarmMessage ? <div
                                             className={'tableArea'}
                                             onMouseDown={this.handleMouseDown}
-                                        />:<div className="blank-text">THIS IS WHERE MESSAGES WILL DISPLAY ABOUT WHY THE SYSTEM IS DISPLAYING THE KEYPAD.   ANY ADDITIONAL INFORMATION WILL SHOW HERE</div>}
-                                       
+                                        /> : <div className="blank-text">No active alarms.</div>}
+
                                     </div>
                                 </div>
                             </div>

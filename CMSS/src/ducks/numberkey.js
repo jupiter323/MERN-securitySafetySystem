@@ -20,6 +20,9 @@ export default function (state = INITIAL_STATE, action) {
         case 'SET_Number_Key_acknowledged_alarm': {
             return { ...state, ...(state.acknowledgedAlarm = action.acknowledgedAlarm) }
         }
+        case 'SET_Alarm_message': {
+            return { ...state, alarmMessages: action.alarmMessages }
+        }
         case 'ADD_Alarm_message': {
             return { ...state, ...(state.alarmMessages.push(action.alarmMessage)) }
         }
