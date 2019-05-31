@@ -92,7 +92,7 @@ $font-dark: #333;
             &:hover {
                 ul.dropdown {
                     visibility: visible!important;
-                    transform: translate(0, 0);
+                    transform: translate(0, 0)!important;
                     opacity: 1!important;
                     z-index: 1000!important;
 

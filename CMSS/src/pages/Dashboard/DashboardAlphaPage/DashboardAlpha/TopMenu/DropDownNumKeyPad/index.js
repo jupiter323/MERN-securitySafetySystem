@@ -72,12 +72,14 @@ export default class DropDownNumKeyPad extends React.Component {
             .css('visibility', 'visible')
             .css('opacity', '1')
             .css('z-index', '1000')
+            .css('transform','translate(0, 0)')
     }
     hiddenThis() {
         $('.numkeypad')
             .css('visibility', 'hidden')           
             .css('opacity', '0')
             .css('z-index', '0')
+            .css('transform','translate(0, -50px)')
     }
     componentWillUnmount() {
         $('#messageContainer')
