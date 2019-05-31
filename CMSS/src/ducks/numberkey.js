@@ -2,13 +2,14 @@ const INITIAL_STATE = {
     numberkeypassed: false,
     buttonsmode: [],
     code: null,
-    acknowledgedAlarm: false
+    acknowledgedAlarm: false,
+    alarmMessages: []
 }
 
 export default function (state = INITIAL_STATE, action) {
     switch (action.type) {
         case 'SET_Number_Key_passed': {
-            return { ...state, ...(state.numberkeypassed = action.numberkeypassed) }           
+            return { ...state, ...(state.numberkeypassed = action.numberkeypassed) }
         }
         case 'SET_Number_Key_button_mode': {
             return { ...state, ...(state.buttonsmode = action.buttonsmode) }
@@ -18,6 +19,9 @@ export default function (state = INITIAL_STATE, action) {
         }
         case 'SET_Number_Key_acknowledged_alarm': {
             return { ...state, ...(state.acknowledgedAlarm = action.acknowledgedAlarm) }
+        }
+        case 'ADD_Alarm_message': {
+            return { ...state, ...(state.alarmMessages.push(action.alarmMessage)) }
         }
 
         default:

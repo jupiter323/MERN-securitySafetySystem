@@ -275,17 +275,17 @@ class TopMenu extends React.Component {
           }
           case 'Alarm': {
             console.log('Alarm: ', received_msg)
-            let result = result_array[2].slice(0, -1)
-            if (result === 'OK') {
-              // let { dispatch } = this.props
-              // dispatch({
-              //   type: 'SET_Number_Key_passed',
-              //   numberkeypassed: true,
-              // })
+            let resultLength = result_array.length
+            var alarmMessage = { 'DateTime': result_array[2].slice(0, -1), 'DeviceName': result_array[3].slice(0, -1), 'msg': result_array[4].slice(0, -1) }
+            if (resultLength > 1) {
+              let { dispatch } = this.props
+              dispatch({
+                type: 'ADD_Alarm_message',
+                alarmMessage,
+              })
               message.info("You received the Alarm")
             } else {
-              let error = result_array[3].slice(0, -1)
-              message.error(error);
+              message.error("your alarm doesn't have message");
             }
             break;
           }
@@ -647,7 +647,7 @@ class TopMenu extends React.Component {
   }
   onAcknowledgeAlarmActive = (code) => {
     let username = cookie.load('UserName');
-    let data = `<KeypadAlarmAcknowledge><${username}><${code}>`    
+    let data = `<KeypadAlarmAcknowledge><${username}><${code}>`
     if (!this.socketOpened) {
       this.openSocket()
       message.error('Socket is disconnected! ...Please try again.')

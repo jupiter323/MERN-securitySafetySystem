@@ -16,6 +16,7 @@ import num9Image from 'assets/img/numkeypad/9 Button.svg'
 import backImage from 'assets/img/numkeypad/Back Button.svg'
 import enterImage from 'assets/img/numkeypad/Enter Button.svg'
 
+let init_table_flag = false
 let scroll_flag = true
 let update_flag = true
 let eventRow_count = 50
@@ -37,15 +38,19 @@ export default class DropDownNumKeyPad extends React.Component {
         super(props);
         this.state = {
             keyboardInputValue: '',
-            // numberkeypassed: localStorage.numberkeypassed        ,
-            alarmMessages: []
+            // numberkeypassed: localStorage.numberkeypassed        ,      
+            receivedAlarmMessage: false
         }
     }
-    async componentDidMount() {
-        await this.setState({
-            alarmMessages: [{ msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }]
-        })
-        this.initTable()
+    componentDidMount() {
+        // await this.setState({
+        //     alarmMessages: [{ msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }]
+        // })
+    }
+
+    componentWillReceiveProps(next) {
+        // if (!init_table_flag)
+        this.initTable(next)
     }
     componentWillUnmount() {
         $('#messageContainer')
@@ -93,8 +98,9 @@ export default class DropDownNumKeyPad extends React.Component {
     handleControlButton = (key) => {
         let { numberkey, onActivateButton, onAcknowledgeAlarmActive } = this.props
         var { numberkeypassed, buttonsmode, code } = numberkey
+        var { receivedAlarmMessage } = this.state
         if (!numberkeypassed) return; // unloacked
-        if (key === 'acknowledge') return onAcknowledgeAlarmActive(code) //acknowledge alarms
+        if (key === 'acknowledge') return (receivedAlarmMessage ? onAcknowledgeAlarmActive(code) : null) //acknowledge alarms
 
         var buttonmodeJson = this.buttonModearrayToJson(buttonsmode)
         let buttonMode = buttonsmode.filter(e => e['key'] === key)[0]
@@ -116,7 +122,8 @@ export default class DropDownNumKeyPad extends React.Component {
         if (bottom < 100) {
             update_flag = !update_flag
             let renderAlarmMessages = []
-            let { alarmMessages } = this.state
+            var { numberkey } = this.props
+            var { alarmMessages } = numberkey
             let eventArray = alarmMessages
             let cur_eventArray = []
             let count = 0
@@ -142,9 +149,11 @@ export default class DropDownNumKeyPad extends React.Component {
         }
     }
 
-    initTable = () => {
-        let { alarmMessages } = this.state
-
+    initTable = async (next) => {
+        var { numberkey } = next
+        var { alarmMessages } = numberkey
+        init_table_flag = true
+        if (alarmMessages.length) await this.setState({ receivedAlarmMessage: true })
         let limit_count = 50
         let count = limit_count > alarmMessages.length ? alarmMessages.length : limit_count
         let start = 0
@@ -168,7 +177,7 @@ export default class DropDownNumKeyPad extends React.Component {
     }
 
     renderTable = alarmMessages => {
-        alarmMessages.forEach(log => {
+        alarmMessages.map(log => {
             let className = 'row eventRow'
 
             let new_row = $(
@@ -185,13 +194,17 @@ export default class DropDownNumKeyPad extends React.Component {
                 .find('.tableArea')
                 .append(new_row)
         })
+
+    }
+    handleMouseDown = () => {
+        console.log("clicked mouse")
     }
     render() {
         let { numberkey } = this.props
-        var { numberkeypassed, buttonsmode, acknowledgedAlarm } = numberkey
-        let { keyboardInputValue } = this.state
+        var { numberkeypassed, buttonsmode, acknowledgedAlarm, alarmMessages } = numberkey
+        let { keyboardInputValue, receivedAlarmMessage } = this.state
         var buttonmodeJson = this.buttonModearrayToJson(buttonsmode)
-        console.log("number key passed: ", numberkeypassed, buttonsmode, buttonmodeJson)     
+        console.log("number key alarms: ", alarmMessages)
         return (
             <ul className="dropdown numkeypad p-1">
                 <div className="row w-100 m-0 top-row-num">
@@ -210,10 +223,11 @@ export default class DropDownNumKeyPad extends React.Component {
                                 <div className="AlarmMessageView">
                                     <div className={'messageTitle'}>MESSAGES</div>
                                     <div id={'messageContainer'} onScroll={this.handleScroll}>
-                                        <div
+                                        {receivedAlarmMessage? <div
                                             className={'tableArea'}
                                             onMouseDown={this.handleMouseDown}
-                                        />
+                                        />:<div className="blank-text">THIS IS WHERE MESSAGES WILL DISPLAY ABOUT WHY THE SYSTEM IS DISPLAYING THE KEYPAD.   ANY ADDITIONAL INFORMATION WILL SHOW HERE</div>}
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -316,26 +330,26 @@ export default class DropDownNumKeyPad extends React.Component {
                 </div>
                 <div className="row w-100 m-0">
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("owner")}>
-                  
+
                         <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['owner']} btnTxt={["OWNER'S", "CITADEL", "MODE"]} />
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("general")} >
-                   
+
                         <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['general']} btnTxt={["GENERAL", "CITADEL", "MODE"]} />
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("normal")}>
-                  
+
                         <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['normal']} btnTxt={["NORMAL", "OPERATING", "MODE"]} />
 
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("emergency")}>
-                      
+
                         <ControlButton numberkeypassed={numberkeypassed} state={buttonmodeJson['emergency']} btnTxt={["EMERGENCY", "DACS LOCKS", "OVERRIDE"]} />
 
                     </div>
                     <div className="col p-0 m-0 h-100" onClick={() => this.handleControlButton("acknowledge")}>
-                      
-                        <AcknowledgeAlarm numberkeypassed={numberkeypassed} state={acknowledgedAlarm} btnTxt={["ACKNOWLEDGE", "ALARM"]} />
+
+                        <AcknowledgeAlarm numberkeypassed={numberkeypassed} acknowledgedState={acknowledgedAlarm} btnTxt={["ACKNOWLEDGE", "ALARM"]} receivedAlarmMessage={receivedAlarmMessage} />
 
                     </div>
                 </div>
@@ -365,8 +379,8 @@ function ControlButton(props) {
     )
 }
 function AcknowledgeAlarm(props) {
-    var { state, numberkeypassed, btnTxt } = props
-    var classname = (numberkeypassed ? state ? 'ack-ulocked-active' : 'ack-ulocked-inactive' : state ? 'ack-locked-active' : 'ack-locked-inactive') + " ack-button"
+    var { acknowledgedState, numberkeypassed, btnTxt, receivedAlarmMessage } = props
+    var classname = (numberkeypassed ? receivedAlarmMessage ? 'ack-ulocked-active' : 'ack-ulocked-inactive' : receivedAlarmMessage ? 'ack-locked-active' : 'ack-locked-inactive') + " ack-button"
     return (
         <div className={classname} >
             <div className="wrap-text">
