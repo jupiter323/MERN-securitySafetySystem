@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   mapDispatchToProps,
 )
 class CameraPopup extends React.Component {
-  ws = new WebSocket(socketUrl)
+  ws
   socketOpened = false
 
   componentDidMount() {
@@ -29,6 +29,7 @@ class CameraPopup extends React.Component {
   }
 
   openSocket = () => {
+    this.ws = new WebSocket(socketUrl)
     this.ws.onopen = () => {
       console.log('opened')
       this.socketOpened = true
@@ -137,7 +138,9 @@ class CameraPopup extends React.Component {
     // }, 10000);
 
   }
+  componentDidUpdate() {
 
+  }
   render() {
     let { info, displayInfo } = this.props
     let { display, left, top } = displayInfo

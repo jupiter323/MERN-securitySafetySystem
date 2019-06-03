@@ -84,7 +84,7 @@ class TopMenu extends React.Component {
     wsversion: ""
   }
 
-  ws = new WebSocket(socketUrl)
+  ws 
   socketOpened = false
 
   componentDidMount() {
@@ -99,12 +99,10 @@ class TopMenu extends React.Component {
         this.onKeypadQueryButtonMode();
       }
     }, 2000);
-
-
-
   }
 
   openSocket = () => {
+    this.ws = new WebSocket(socketUrl)
     this.ws.onopen = () => {
       console.log('opened')
       this.socketOpened = true
@@ -132,11 +130,27 @@ class TopMenu extends React.Component {
             break
           }
           case 'UserChangeSecurityLevel': {
-            if (result_array.length === 6) {
-              let result = result_array[5].slice(0, -1)
+            console.log('UserChangeSecurityLevel: ', received_msg)
+            let result = result_array[5].slice(0, -1)
+            if (result_array.length === 6 || result_array.length === 5) {
               if (result === 'OK') {
                 let data = '<GetSystemInfo>'
                 this.ws.send(data)
+                message.info("Security level was changed successfully!")
+              } else {
+                message.error("Can not change the security level.")
+              }
+            }
+            break
+          }
+          case 'ChangeSecurityLevel': {
+            console.log('ChangeSecurityLevel: ', received_msg)
+            let result = result_array[5].slice(0, -1)
+            if (result_array.length === 6 || result_array.length === 5) {
+              if (result === 'OK') {
+                let data = '<GetSystemInfo>'
+                this.ws.send(data)
+                message.info("Security level was changed successfully!")
               } else {
                 message.error("Can not change the security level.")
               }
@@ -302,7 +316,7 @@ class TopMenu extends React.Component {
                 type: 'SET_Number_Key_acknowledged_alarm',
                 acknowledgedAlarm: true,
               })
-              
+
               message.info("Acknowledged active alarms")
             } else {
               let error = result_array[3].slice(0, -1)
@@ -661,9 +675,12 @@ class TopMenu extends React.Component {
     }
   }
 
+  componentDidUpdate() {
 
+  }
 
   render() {
+
     let { decks, devices, deckLocations, urls, accessInfo, deckZonesInfo, systemInfo } = this.props
     let deckZones
     if (deckZonesInfo.deckZones) {

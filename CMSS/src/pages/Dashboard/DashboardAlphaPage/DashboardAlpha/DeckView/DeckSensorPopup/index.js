@@ -44,7 +44,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   mapDispatchToProps,
 )
 class DeckSensorPopup extends React.Component {
-  ws = new WebSocket(socketUrl)
+  ws
   socketOpened = false
 
   state = {
@@ -52,69 +52,11 @@ class DeckSensorPopup extends React.Component {
   }
 
   componentDidMount() {
-    this.ws.onopen = () => {
-      console.log('opened')
-      this.socketOpened = true
-    }
-
-    this.ws.onmessage = evt => {
-      console.log('receive mag', evt.data)
-      var received_msg = evt.data
-      let result_array = received_msg.split('<')
-      if (result_array.length > 1) {
-        let command_type = result_array[1].slice(0, -1)
-        switch (command_type) {
-          case 'DeckSensorAllEnable': {
-            let result = result_array[4].slice(0, -1)
-            if (result === 'OK') {
-              let type = result_array[3].slice(0, -1)
-              if (type === 'Enable') {
-                message.success('All deck sensors are enabled successfully.')
-              } else {
-                message.success('All deck sensors are disabled successfully.')
-              }
-            } else {
-              let type = result_array[3].slice(0, -1)
-              if (type === 'Enable') {
-                message.error('Enable all deck sensors is failed.')
-              } else {
-                message.error('Disable all deck sensors is failed.')
-              }
-            }
-            break
-          }
-          case 'DeckSensorZoneEnable': {
-            let result = result_array[6].slice(0, -1)
-            if (result === 'OK') {
-              let type = result_array[5].slice(0, -1)
-              if (type === 'Enable') {
-                message.success('All deck sensors in this deck zone are enabled successfully.')
-              } else {
-                message.success('All deck sensors in this deck zone are disabled successfully.')
-              }
-            } else {
-              let type = result_array[5].slice(0, -1)
-              if (type === 'Enable') {
-                message.error('Enable all deck sensors in this deck zone is failed.')
-              } else {
-                message.error('Disable all deck sensors in this deck zone is failed.')
-              }
-            }
-            break
-          }
-        }
-      }
-    }
-
-    this.ws.onclose = () => {
-      // websocket is closed.
-      console.log('Connection is closed...')
-      this.socketOpened = false
-      document.getElementById('root').style.cursor = 'default'
-    }
+    this.openSocket()
   }
 
   openSocket = () => {
+    this.ws = new WebSocket(socketUrl)
     this.ws.onopen = () => {
       console.log('opened')
       this.socketOpened = true
@@ -251,6 +193,10 @@ class DeckSensorPopup extends React.Component {
         for (let eee of ee['Equipments'])
           if (eee['EquipmentTypeName'] === equipmenttypename) return true
   }
+  componentDidUpdate() {
+
+  }
+
   render() {
     let { displayInfo, deckZonesInfo, currentDeck } = this.props
     let { display, left, top } = displayInfo
