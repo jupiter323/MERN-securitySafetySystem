@@ -126,14 +126,15 @@ class DashboardAlpha extends React.PureComponent {
             })
           }
         }
-        items.push({
-          i: 'sensorView',
-          x: cols * w,
-          y: 0,
-          w: 3,
-          h: 4,
-          draggable: true,
-        })
+        // add sensor view
+        // items.push({
+        //   i: 'sensorView',
+        //   x: cols * w,
+        //   y: 0,
+        //   w: 3,
+        //   h: 4,
+        //   draggable: true,
+        // })
         items.push({
           i: 'playbackView',
           x: cols * w,
