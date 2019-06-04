@@ -87,7 +87,17 @@ class TopMenu extends React.Component {
 
   ws
   socketOpened = false
-
+  socketReconnectTried = false;
+  componentDidUpdate() {
+    if (!this.socketOpened && !this.socketReconnectTried) {
+      this.openSocket()
+      this.socketReconnectTried = true
+      setTimeout(() => {
+        this.socketReconnectTried = false
+      }, 3000);
+    }
+    
+  }
   componentDidMount() {
     this.openSocket();
     setTimeout(() => {
@@ -107,6 +117,7 @@ class TopMenu extends React.Component {
     this.ws.onopen = () => {
       console.log('opened')
       this.socketOpened = true
+      this.socketReconnectTried = false
     }
 
     this.ws.onmessage = evt => {
@@ -676,9 +687,7 @@ class TopMenu extends React.Component {
     }
   }
 
-  componentDidUpdate() {
 
-  }
   handleNumKeyPadVisible = () => {
     var { visibleNumKeyPad } = this.state
     this.setState({ visibleNumKeyPad: !visibleNumKeyPad })

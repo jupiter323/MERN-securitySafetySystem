@@ -24,6 +24,17 @@ class CameraPopup extends React.Component {
   ws
   socketOpened = false
 
+  socketReconnectTried = false;
+  componentDidUpdate() {
+    if (!this.socketOpened && !this.socketReconnectTried) {
+      this.openSocket()
+      this.socketReconnectTried = true
+      setTimeout(() => {
+        this.socketReconnectTried = false
+      }, 3000);
+    }
+   
+  }
   componentDidMount() {
     this.openSocket()
   }
@@ -33,6 +44,7 @@ class CameraPopup extends React.Component {
     this.ws.onopen = () => {
       console.log('opened')
       this.socketOpened = true
+      this.socketReconnectTried = false
     }
 
     this.ws.onmessage = evt => {
@@ -138,9 +150,7 @@ class CameraPopup extends React.Component {
     // }, 10000);
 
   }
-  componentDidUpdate() {
 
-  }
   render() {
     let { info, displayInfo } = this.props
     let { display, left, top } = displayInfo
