@@ -248,7 +248,7 @@ class PlaybackView extends React.Component {
               </div>
             </div>
 
-            <div className="slider orientation-reversed">
+            {/* <div className="slider orientation-reversed">
               <div className="slider-horizontal">
                 <Slider
                   className="playSlider"
@@ -261,7 +261,7 @@ class PlaybackView extends React.Component {
                   onChange={this.handleChangeHorizontal}
                 />
               </div>
-            </div>
+            </div> */}
             <hr
               style={{
                 width: '100%',
