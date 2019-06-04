@@ -81,10 +81,11 @@ class TopMenu extends React.Component {
     securitySettingDisplay: 'none',
     userName: '',
     password: '',
-    wsversion: ""
+    wsversion: "",
+    visibleNumKeyPad: false
   }
 
-  ws 
+  ws
   socketOpened = false
 
   componentDidMount() {
@@ -678,6 +679,10 @@ class TopMenu extends React.Component {
   componentDidUpdate() {
 
   }
+  handleNumKeyPadVisible = () => {
+    var { visibleNumKeyPad } = this.state
+    this.setState({ visibleNumKeyPad: !visibleNumKeyPad })
+  }
 
   render() {
 
@@ -686,7 +691,7 @@ class TopMenu extends React.Component {
     if (deckZonesInfo.deckZones) {
       deckZones = deckZonesInfo.deckZones
     }
-    let { securitySettingDisplay, loginViewDisplay, userName, password } = this.state
+    let { securitySettingDisplay, loginViewDisplay, userName, password, visibleNumKeyPad } = this.state
     let securityLevel =
       systemInfo.systemSecurityLevel !== 'none'
         ? systemInfo.systemSecurityLevel
@@ -789,8 +794,8 @@ class TopMenu extends React.Component {
             <DropDownEvent type={'EVENT LOG'} onClick={this.onEventItemClick} />
           </li>
           <li>
-            <img className="menuItemImage" src={numKeyPadImage} alt="NumKeyPad" />
-            <DropDownNumKeyPad type={'KEY PAD'} onKeypadValidateUser={this.onKeypadValidateUser} onActivateButton={this.onActivateButton} onAcknowledgeAlarmActive={this.onAcknowledgeAlarmActive} />
+            <img className="menuItemImage" src={numKeyPadImage} alt="NumKeyPad" onClick={this.handleNumKeyPadVisible} />
+            <DropDownNumKeyPad type={'KEY PAD'} onKeypadValidateUser={this.onKeypadValidateUser} onActivateButton={this.onActivateButton} onAcknowledgeAlarmActive={this.onAcknowledgeAlarmActive} visibleNumKeyPad={visibleNumKeyPad} />
           </li>
           <li className={'palladiumLogo'}>
             <img

@@ -46,11 +46,12 @@ export default class DropDownNumKeyPad extends React.Component {
         // await this.setState({
         //     alarmMessages: [{ msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }, { msg: "first", DeviceName: "any device", DateTime: null }]
         // })
+        $('#numkeypad').draggable({})
     }
 
     componentWillReceiveProps(next) {
         // if (!init_table_flag)
-        var { numberkey, dispatch } = next
+        var { numberkey, dispatch, visibleNumKeyPad } = next
         var { alarmMessages, acknowledgedAlarm } = numberkey;
         if (acknowledgedAlarm)
             dispatch({
@@ -64,6 +65,11 @@ export default class DropDownNumKeyPad extends React.Component {
             this.setState({ receivedAlarmMessage: false });
             // this.hiddenThis()
         }
+        if (visibleNumKeyPad) {
+            this.visibleThis();
+        } else {
+            this.hiddenThis()
+        }
 
         this.initTable(next)
     }
@@ -72,14 +78,14 @@ export default class DropDownNumKeyPad extends React.Component {
             .css('visibility', 'visible')
             .css('opacity', '1')
             .css('z-index', '1000')
-            .css('transform','translate(0, 0)')
+            .css('transform', 'translate(0, 0)')
     }
     hiddenThis() {
         $('.numkeypad')
-            .css('visibility', 'hidden')           
+            .css('visibility', 'hidden')
             .css('opacity', '0')
             .css('z-index', '0')
-            .css('transform','translate(0, -50px)')
+            .css('transform', 'translate(0, -50px)')
     }
     componentWillUnmount() {
         $('#messageContainer')
@@ -99,7 +105,6 @@ export default class DropDownNumKeyPad extends React.Component {
 
                 break;
             case "-2":
-                message.info("completed number input as " + this.state.keyboardInputValue);
                 this.setNumberKeyPassed()
                 break;
             default:
@@ -247,7 +252,7 @@ export default class DropDownNumKeyPad extends React.Component {
         var buttonmodeJson = this.buttonModearrayToJson(buttonsmode)
         console.log("number key alarms: ", alarmMessages)
         return (
-            <ul className="dropdown numkeypad p-1">
+            <ul className="numkeypad p-1" id="numkeypad">
                 <div className="row w-100 m-0 top-row-num">
                     <div className="col p-0 h-100">
                         <div className="row m-0 top-row-digit">
