@@ -1,16 +1,29 @@
 @import '../../../../resources/mixins';
 
 .title-label {
-  .ant-form-item-label > label {
-      color: rgb(0, 237, 255) !important;
-  }
+    .ant-form-item-label>label {
+        color: rgb(0, 237, 255) !important;
+    }
 }
+
+.loginform-height {
+    height: 460px !important;
+
+}
+
+@media only screen and (min-width: 3840px) {
+    .loginform-height {
+        height: 32.5vh !important
+    }
+}
+
+
 .main-login {
     background-size: cover;
     background-color: $gray-lighten-more;
     background-position: center center;
 
-   
+
 
 
     &--fullscreen {

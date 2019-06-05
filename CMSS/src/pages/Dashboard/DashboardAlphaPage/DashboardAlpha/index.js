@@ -90,10 +90,10 @@ class DashboardAlpha extends React.PureComponent {
           type: 'SET_DECK_VIEW',
           deckView: { visible: true },
         })
-        dispatch({
-          type: 'SET_SENSOR_VIEW',
-          sensorView: { visible: true },
-        })
+        // dispatch({
+        //   type: 'SET_SENSOR_VIEW',
+        //   sensorView: { visible: true },
+        // })
         dispatch({
           type: 'SET_EVENT_VIEW',
           eventView: { visible: true },
@@ -239,6 +239,7 @@ class DashboardAlpha extends React.PureComponent {
 
   addEventView = () => {
     console.log('Adding Event View: ')
+    var { dispatch } = this.props
     let { items } = this.state
     this.setState({
       // Add a new item. It must have a unique key!
@@ -252,11 +253,16 @@ class DashboardAlpha extends React.PureComponent {
         minH: 3,
       }),
     })
+    dispatch({
+      type: 'SET_EVENT_VIEW',
+      eventView: { visible: true },
+    })
   }
 
   addSensorView = () => {
     console.log('Adding Sensor View: ')
     let { items } = this.state
+    var { dispatch } = this.props
     this.setState({
       // Add a new item. It must have a unique key!
       items: items.concat({
@@ -266,6 +272,10 @@ class DashboardAlpha extends React.PureComponent {
         w: 3,
         h: 4,
       }),
+    })
+    dispatch({
+      type: 'SET_SENSOR_VIEW',
+      sensorView: { visible: true },
     })
   }
 
@@ -491,7 +501,7 @@ class DashboardAlpha extends React.PureComponent {
     if (grid_lay_conf.rowHeight) {
       grid_lay_conf.rowHeight = r_height
     }
-    let { accessInfo, cameraEventViewInfo, logInfo} = this.props
+    let { accessInfo, cameraEventViewInfo, logInfo } = this.props
     return (
       <div id={"mainContainer"}>
         <TopMenu

@@ -45,9 +45,11 @@ class Login extends React.Component {
             <div className="row">
                 <div className="col-lg-12">
                     <div className="grid-stack cameraView grid grid-stack-11" id="grid1">
-                        <div className="grid-stack-item"
+                        <div className="grid-stack-item loginform-height"
                              data-gs-x="4" data-gs-y="2"
-                             data-gs-width="4" data-gs-height="6">
+                             data-gs-width="4" 
+                            //  data-gs-height="9"
+                             >
                             <div
                                 className="LoginCard
                                 grid-stack-item-content

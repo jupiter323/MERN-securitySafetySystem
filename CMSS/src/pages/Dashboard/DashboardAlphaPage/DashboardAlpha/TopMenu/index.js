@@ -56,7 +56,7 @@ const mapStateToProps = (state, props) => ({
   widgetInfo: state.widgetInfo,
   deckZonesInfo: state.deckZonesInfo,
   eventInfo: state.eventInfo,
-  systemInfo: state.systemInfo,
+  systemInfo: state.systemInfo
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -96,7 +96,7 @@ class TopMenu extends React.Component {
         this.socketReconnectTried = false
       }, 3000);
     }
-    
+
   }
   componentDidMount() {
     this.openSocket();
@@ -215,7 +215,7 @@ class TopMenu extends React.Component {
                 numberkeypassed: true,
               })
               // localStorage.setItem("numberkeypassed", "1");
-              message.info("Your number passed as well")
+              message.info("Keycode accepted, access granted.")
             } else {
               let error = result_array[3].slice(0, -1)
               message.error(error);
@@ -305,6 +305,7 @@ class TopMenu extends React.Component {
             var alarmMessage = { 'DateTime': result_array[2].slice(0, -1), 'DeviceName': result_array[3].slice(0, -1), 'msg': result_array[4].slice(0, -1) }
             if (resultLength > 1) {
               let { dispatch } = this.props
+              this.setState({ visibleNumKeyPad: true })
               dispatch({
                 type: 'ADD_Alarm_message',
                 alarmMessage,
@@ -335,6 +336,15 @@ class TopMenu extends React.Component {
               message.error(error);
             }
             break;
+          }
+          case 'CameraLiftActionAll': {
+            console.log('CameraLiftActionAll: ', received_msg)
+            let result = result_array[4].slice(0, -1)
+            if (result === 'OK') {
+              message.info(`All Camera ${result_array[3].slice(0, -1)} succeed`)
+            } else {
+              message.info(`All Camera ${result_array[3].slice(0, -1)} faild`)
+            }
           }
         }
       }
@@ -635,9 +645,14 @@ class TopMenu extends React.Component {
     })
   }
 
-  handleDroneView = () => {
-    let { addSensorView } = this.props
-    addSensorView()
+  handleDroneView = type => {
+    let { addSensorView, removeView } = this.props
+    if (type === 0) {
+      addSensorView()
+    }
+    if (type === 1) {
+      removeView('sensorView')
+    }
   }
 
   onKeypadValidateUser = (code) => {
@@ -688,14 +703,17 @@ class TopMenu extends React.Component {
   }
 
 
-  handleNumKeyPadVisible = () => {
+  handleNumKeyPadVisible = (visible) => {
     var { visibleNumKeyPad } = this.state
+    // if (visible)
+    //   this.setState({ visibleNumKeyPad: visible })
+    // else
     this.setState({ visibleNumKeyPad: !visibleNumKeyPad })
   }
 
   render() {
 
-    let { decks, devices, deckLocations, urls, accessInfo, deckZonesInfo, systemInfo } = this.props
+    let { decks, devices, deckLocations, urls, accessInfo, deckZonesInfo, systemInfo, widgetInfo } = this.props
     let deckZones
     if (deckZonesInfo.deckZones) {
       deckZones = deckZonesInfo.deckZones
@@ -796,15 +814,15 @@ class TopMenu extends React.Component {
           </li>
           <li>
             <img className="menuItemImage" src={droneImage} alt="DroneView" />
-            <DropDownDroneView type={'DRONE VIEW'} onClick={this.handleDroneView} />
+            <DropDownDroneView type={'DRONE VIEW'} onClick={this.handleDroneView} visible={widgetInfo.sensorView.visible} />
           </li>
           <li>
             <img className="menuItemImage" src={eventLogImage} alt="EventLog" />
-            <DropDownEvent type={'EVENT LOG'} onClick={this.onEventItemClick} />
+            <DropDownEvent type={'EVENT LOG'} onClick={this.onEventItemClick} visible={widgetInfo.eventView.visible} />
           </li>
           <li>
             <img className="menuItemImage" src={numKeyPadImage} alt="NumKeyPad" onClick={this.handleNumKeyPadVisible} />
-            <DropDownNumKeyPad type={'KEY PAD'} onKeypadValidateUser={this.onKeypadValidateUser} onActivateButton={this.onActivateButton} onAcknowledgeAlarmActive={this.onAcknowledgeAlarmActive} visibleNumKeyPad={visibleNumKeyPad} />
+            <DropDownNumKeyPad type={'KEY PAD'} onKeypadValidateUser={this.onKeypadValidateUser} onActivateButton={this.onActivateButton} onAcknowledgeAlarmActive={this.onAcknowledgeAlarmActive} visibleNumKeyPad={visibleNumKeyPad} handleNumKeyPadVisible={this.handleNumKeyPadVisible} />
           </li>
           <li className={'palladiumLogo'}>
             <img
@@ -1468,38 +1486,43 @@ function DropDownDeckSensor(props) {
 }
 
 function DropDownEvent(props) {
-  let { type, onClick } = props
+  let { type, onClick, visible } = props
   return (
     <ul className="dropdown">
       <li className="title">
         <label style={{ textDecoration: 'underline' }}>{type}</label>
       </li>
-      <li>
+      {!visible && <li>
         <div className="dropdownlink" onClick={onClick.bind(this, 0)}>
           OPEN
         </div>
-      </li>
-      <li>
+      </li>}
+      {visible && <li>
         <div className="dropdownlink" onClick={onClick.bind(this, 1)}>
           CLOSE
         </div>
-      </li>
+      </li>}
     </ul>
   )
 }
 
 function DropDownDroneView(props) {
-  let { type, onClick } = props
+  let { type, onClick, visible } = props
   return (
     <ul className="dropdown">
       <li className="title">
         <label style={{ textDecoration: 'underline' }}>{type}</label>
       </li>
-      <li>
-        <div className="dropdownlink" onClick={onClick}>
+      {!visible && <li>
+        <div className="dropdownlink" onClick={onClick.bind(this, 0)}>
           OPEN
         </div>
-      </li>
+      </li>}
+      {visible && <li>
+        <div className="dropdownlink" onClick={onClick.bind(this, 1)}>
+          CLOSE
+        </div>
+      </li>}
     </ul>
   )
 }

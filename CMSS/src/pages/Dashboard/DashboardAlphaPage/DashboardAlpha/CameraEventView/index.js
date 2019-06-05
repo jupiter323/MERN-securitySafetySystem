@@ -481,7 +481,8 @@ class CameraEventView extends React.Component {
               )}
             <span className={'sortType'}>Event Type</span>
           </div>
-          <div
+          <div className="sortright"></div>
+          {/* <div
             className={sortType === 'location' ? 'sortItem selected' : 'sortItem'}
             onClick={this.onSortClick.bind(this, 'location')}
           >
@@ -510,7 +511,7 @@ class CameraEventView extends React.Component {
                 </span>
               )}
             <span className={'sortType'}>Sort Elements</span>
-          </div>
+          </div> */}
         </div>
         <div className={'headerArea row'}>
           <div className={'col-3 headerItem'}>EVENT</div>

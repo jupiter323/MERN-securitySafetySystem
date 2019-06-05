@@ -58,12 +58,14 @@ export default class DropDownNumKeyPad extends React.Component {
                 type: 'SET_Number_Key_acknowledged_alarm',
                 acknowledgedAlarm: false,
             })
+        this.initTable(next)
+
+
+
         if (alarmMessages.length) {
             this.setState({ receivedAlarmMessage: true });
-            this.visibleThis();
         } else {
             this.setState({ receivedAlarmMessage: false });
-            // this.hiddenThis()
         }
         if (visibleNumKeyPad) {
             this.visibleThis();
@@ -71,7 +73,9 @@ export default class DropDownNumKeyPad extends React.Component {
             this.hiddenThis()
         }
 
-        this.initTable(next)
+
+
+
     }
     visibleThis() {
         $('.numkeypad')
@@ -130,13 +134,14 @@ export default class DropDownNumKeyPad extends React.Component {
         return buttonmodeJson;
     }
     handleControlButton = (key) => {
-        let { numberkey, onActivateButton, onAcknowledgeAlarmActive } = this.props
+        let { numberkey, onActivateButton, onAcknowledgeAlarmActive, handleNumKeyPadVisible } = this.props
         var { numberkeypassed, buttonsmode, code } = numberkey
         var { receivedAlarmMessage } = this.state
         if (!numberkeypassed) return; // unloacked
         if (key === 'acknowledge') { // acknowledge button clicked
             if (receivedAlarmMessage) { //if there is received alarm messages
                 this.hiddenThis()
+                handleNumKeyPadVisible()
                 onAcknowledgeAlarmActive(code)
             }
 
