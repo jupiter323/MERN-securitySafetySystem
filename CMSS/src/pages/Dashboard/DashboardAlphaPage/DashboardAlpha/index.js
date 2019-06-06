@@ -112,7 +112,7 @@ class DashboardAlpha extends React.PureComponent {
         })
         let items = []
         const camera_count = cameras.length
-        const cols = 3
+        const cols = 4
         const w = 3
         const h = 2
         if (camera_count > 0) {
