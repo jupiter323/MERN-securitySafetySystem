@@ -15,7 +15,9 @@ const mapStateToProps = (state, props) => ({
   accessInfo: state.accessInfo,
   eventInfo: state.eventInfo,
   widgetInfo: state.widgetInfo,
+  numberkey: state.numberkey
 })
+
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch: dispatch,
@@ -110,7 +112,7 @@ class DeckView extends React.PureComponent {
         })
         break
       }
-      case 3: {      
+      case 3: {
         this.setState({
           cameraPopupDisplay: {
             display: 'none',
@@ -185,7 +187,8 @@ class DeckView extends React.PureComponent {
       cornerImage = 'resources/images/background/blue-corner.png'
     }
     let { currentDeck, decksArray } = this.props.decks
-    let { devices, deckLocations, widgetInfo, urls, dispatch } = this.props
+    let { devices, deckLocations, widgetInfo, urls, dispatch, numberkey } = this.props
+    let { alarmMessages } = numberkey
     let deviceArray_temp = devices.devicesArray
     let deviceAttributeArray = devices.deviceAttributeArray
     let deviceArray = []
@@ -244,8 +247,8 @@ class DeckView extends React.PureComponent {
         {currentDeck.hasOwnProperty('DeckName') ? (
           <img className={'deckImage'} src={deckImage} alt={currentDeck.DeckName} />
         ) : (
-          <div />
-        )}
+            <div />
+          )}
         <div
           className="h7 deckName blue"
           style={{ display: currentDeck.hasOwnProperty('DeckName') ? 'block' : 'none' }}
@@ -386,14 +389,23 @@ class DeckView extends React.PureComponent {
               break
             }
           }
+          var receivedAlramFrom = false;
+          alarmMessages.forEach(e => {
+            if (e.DeviceName == DeviceName) receivedAlramFrom = true
+          })
+
           return (
-            <button
-              className={'securityDevice'}
-              style={{ left: left + '%', top: top + '%' /*'px'*/ }}
-              onClick={this.onDeviceClick.bind(this, accessInfo)}
-            >
-              <img src={buttonImage} className={'deviceButtonImage'} />
-            </button>
+            <div>
+              <button
+                className={'securityDevice'}
+                style={{ left: left + '%', top: top + '%' }}
+                onClick={this.onDeviceClick.bind(this, accessInfo)}
+              >
+                {EquipmentTypeID == 2 && receivedAlramFrom && <div className={'deviceButtonImage camera-icon-active'}>
+                </div>}
+                {EquipmentTypeID != 2 || !receivedAlramFrom && <img src={buttonImage} className={'deviceButtonImage'} />}
+              </button>
+            </div>
           )
         })}
         <CameraPopup
