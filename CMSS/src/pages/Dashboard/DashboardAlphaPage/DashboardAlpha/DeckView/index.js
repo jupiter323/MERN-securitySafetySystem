@@ -403,7 +403,7 @@ class DeckView extends React.PureComponent {
               >
                 {EquipmentTypeID == 2 && receivedAlramFrom && <div className={'deviceButtonImage camera-icon-active'}>
                 </div>}
-                {EquipmentTypeID != 2 || !receivedAlramFrom && <img src={buttonImage} className={'deviceButtonImage'} />}
+                {!receivedAlramFrom && <img src={buttonImage} className={'deviceButtonImage'} />}
               </button>
             </div>
           )

@@ -60,7 +60,7 @@ class DeckSensorPopup extends React.Component {
         this.socketReconnectTried = false
       }, 3000);
     }
-    
+
   }
   componentDidMount() {
     this.openSocket()
@@ -82,6 +82,14 @@ class DeckSensorPopup extends React.Component {
         let command_type = result_array[1].slice(0, -1)
         switch (command_type) {
           case 'DeckSensorAllEnable': {
+            // number keyoad alarm
+            var alarmMessage = { 'DateTime': new Date(), 'DeviceName': "All", 'msg': `Sensor ${result_array[3].slice(0, -1)} ${result_array[4].slice(0, -1)}` }
+            let { dispatch } = this.props
+            dispatch({
+              type: 'ADD_Alarm_message',
+              alarmMessage,
+            })
+
             let result = result_array[4].slice(0, -1)
             if (result === 'OK') {
               let type = result_array[3].slice(0, -1)
@@ -101,6 +109,15 @@ class DeckSensorPopup extends React.Component {
             break
           }
           case 'DeckSensorZoneEnable': {
+             // number keyoad alarm
+             var alarmMessage = { 'DateTime': new Date(), 'DeviceName': result_array[3].slice(0, -1), 'msg': `Sensor ${result_array[4].slice(0, -1)} ${result_array[5].slice(0, -1)}` }
+             let { dispatch } = this.props
+             dispatch({
+               type: 'ADD_Alarm_message',
+               alarmMessage,
+             })
+
+             
             let result = result_array[6].slice(0, -1)
             if (result === 'OK') {
               let type = result_array[5].slice(0, -1)
@@ -205,7 +222,7 @@ class DeckSensorPopup extends React.Component {
         for (let eee of ee['Equipments'])
           if (eee['EquipmentTypeName'] === equipmenttypename) return true
   }
-  
+
 
   render() {
     let { displayInfo, deckZonesInfo, currentDeck } = this.props

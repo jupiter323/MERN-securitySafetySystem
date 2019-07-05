@@ -56,7 +56,8 @@ const mapStateToProps = (state, props) => ({
   widgetInfo: state.widgetInfo,
   deckZonesInfo: state.deckZonesInfo,
   eventInfo: state.eventInfo,
-  systemInfo: state.systemInfo
+  systemInfo: state.systemInfo,
+  numberkey: state.numberkey
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -88,6 +89,10 @@ class TopMenu extends React.Component {
   ws
   socketOpened = false
   socketReconnectTried = false;
+  componentWillReceiveProps(next) {
+    if (next.numberkey.alarmMessages.length)
+      this.setState({ visibleNumKeyPad: true });
+  }
   componentDidUpdate() {
     if (!this.socketOpened && !this.socketReconnectTried) {
       this.openSocket()
@@ -340,11 +345,96 @@ class TopMenu extends React.Component {
           case 'CameraLiftActionAll': {
             console.log('CameraLiftActionAll: ', received_msg)
             let result = result_array[4].slice(0, -1)
+            // alarm message
+            var alarmMessage = { 'DateTime': new Date(), 'DeviceName': 'All', 'msg': `${result_array[3].slice(0, -1)} ${result_array[4].slice(0, -1)}` }
+            let { dispatch } = this.props
+            this.setState({ visibleNumKeyPad: true })
+            dispatch({
+              type: 'ADD_Alarm_message',
+              alarmMessage,
+            })
+
             if (result === 'OK') {
               message.info(`All Camera ${result_array[3].slice(0, -1)} succeed`)
             } else {
               message.info(`All Camera ${result_array[3].slice(0, -1)} faild`)
             }
+            break;
+          }
+          case 'CameraLiftActionSingle': {
+            console.log('CameraLiftActionSingle: ', received_msg)
+            let result = result_array[4].slice(0, -1)
+            // alarm messag
+            var alarmMessage = { 'DateTime': new Date(), 'DeviceName': result_array[3].slice(0, -1), 'msg': `${result_array[4].slice(0, -1)} ${result_array[5].slice(0, -1)}` }
+            let { dispatch } = this.props
+            this.setState({ visibleNumKeyPad: true })
+            dispatch({
+              type: 'ADD_Alarm_message',
+              alarmMessage,
+            })
+
+            if (result === 'OK') {
+              message.info(`Camera ${result_array[3].slice(0, -1)} succeed`)
+            } else {
+
+              message.info(`Camera ${result_array[3].slice(0, -1)} faild`)
+            }
+            break;
+          }
+          case 'DeckSensorAllEnable': {
+            // number keyoad alarm
+            var alarmMessage = { 'DateTime': new Date(), 'DeviceName': "All", 'msg': `Sensor ${result_array[3].slice(0, -1)} ${result_array[4].slice(0, -1)}` }
+            let { dispatch } = this.props
+            dispatch({
+              type: 'ADD_Alarm_message',
+              alarmMessage,
+            })
+
+            let result = result_array[4].slice(0, -1)
+            if (result === 'OK') {
+              let type = result_array[3].slice(0, -1)
+              if (type === 'Enable') {
+                message.success('All deck sensors are enabled successfully.')
+              } else {
+                message.success('All deck sensors are disabled successfully.')
+              }
+            } else {
+              let type = result_array[3].slice(0, -1)
+              if (type === 'Enable') {
+                message.error('Enable all deck sensors is failed.')
+              } else {
+                message.error('Disable all deck sensors is failed.')
+              }
+            }
+            break
+          }
+          case 'DeckSensorZoneEnable': {
+             // number keyoad alarm
+             var alarmMessage = { 'DateTime': new Date(), 'DeviceName': result_array[3].slice(0, -1), 'msg': `Sensor ${result_array[4].slice(0, -1)} ${result_array[5].slice(0, -1)}` }
+             let { dispatch } = this.props
+             dispatch({
+               type: 'ADD_Alarm_message',
+               alarmMessage,
+             })
+
+             
+            let result = result_array[6].slice(0, -1)
+            if (result === 'OK') {
+              let type = result_array[5].slice(0, -1)
+              if (type === 'Enable') {
+                message.success('All deck sensors in this deck zone are enabled successfully.')
+              } else {
+                message.success('All deck sensors in this deck zone are disabled successfully.')
+              }
+            } else {
+              let type = result_array[5].slice(0, -1)
+              if (type === 'Enable') {
+                message.error('Enable all deck sensors in this deck zone is failed.')
+              } else {
+                message.error('Disable all deck sensors in this deck zone is failed.')
+              }
+            }
+            break
           }
         }
       }

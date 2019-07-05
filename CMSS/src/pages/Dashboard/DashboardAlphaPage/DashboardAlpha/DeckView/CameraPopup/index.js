@@ -33,7 +33,7 @@ class CameraPopup extends React.Component {
         this.socketReconnectTried = false
       }, 3000);
     }
-   
+
   }
   componentDidMount() {
     this.openSocket()
@@ -55,6 +55,15 @@ class CameraPopup extends React.Component {
         let command_type = result_array[1].slice(0, -1)
         switch (command_type) {
           case 'CameraLiftActionSingle': {
+
+            // number keyoad alarm
+            var alarmMessage = { 'DateTime': new Date(), 'DeviceName': result_array[3].slice(0, -1), 'msg': `${result_array[4].slice(0, -1)} ${result_array[5].slice(0, -1)}` }
+            let { dispatch } = this.props            
+            dispatch({
+              type: 'ADD_Alarm_message',
+              alarmMessage,
+            })
+
             if (result_array.length === 6) {
               let result = result_array[5].slice(0, -1)
 
@@ -67,6 +76,7 @@ class CameraPopup extends React.Component {
                     : 'lowered' + ' successfully.',
                 )
                 getAllDeviceAttributes(this.props.dispatch)
+
               } else {
                 let messageTxt = result_array[6].slice(0, -1)
                 message.error(messageTxt + '\tInsufficient permission to operate the camera lift.')
