@@ -304,7 +304,7 @@ class CameraView extends React.Component {
         </div>
         <img src={cornerImage} className="cornerImage" alt="corner" />
         <div className={className}>{camera.Name}</div>
-        {/* <button className={cameraType} onClick={this.controlDisplay} /> */}
+        <button className={cameraType} onClick={this.controlDisplay} />
         <CameraControls
           isPlayBack={isPlayBack}
           isPtz={cameraType === 'camera-ptz'}
