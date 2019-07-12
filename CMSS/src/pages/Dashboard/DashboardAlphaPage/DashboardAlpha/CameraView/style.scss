@@ -139,6 +139,12 @@
     left: 5%;
     overflow: hidden;
   }
+  .red {
+    border: solid 2px #ff0000;
+    border-radius: 5px;
+    color: #ff0000;
+    background: rgba(255,200,0,0.5);
+  }
   .blue {
     border: solid 2px #00efff;
     border-radius: 5px;
