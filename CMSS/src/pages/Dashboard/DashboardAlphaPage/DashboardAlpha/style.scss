@@ -24,6 +24,12 @@
   border-radius: 10px;
   box-shadow: 0 0 20px 1px rgba(2,255,247,0.66), inset 0 0 20px rgba(2,255,247,0.66);
 }
+
+.red {
+  border: solid 2px #ff0000;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 1px rgba(255,100,0,0.66), inset 0 0 20px rgba(255,100,0,0.66);
+}
 .closeButton {
   position: absolute;
   top: 0.1rem;
