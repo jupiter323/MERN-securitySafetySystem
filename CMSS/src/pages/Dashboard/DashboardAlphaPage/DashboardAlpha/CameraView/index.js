@@ -251,7 +251,7 @@ class CameraView extends React.Component {
       }
     })
 
-    let { urls, isPlayBack } = this.props
+    let { urls, isPlayBack, receivedAlramFrom } = this.props
     let isPlaying = urls.isPlaying
     if (isPlayBack) {
       this.switchToPlayback(urls.playBackTime)
@@ -275,14 +275,19 @@ class CameraView extends React.Component {
     }
     let { border, display } = this.state
     let src = urls.imageURLs[camera.Id] || ''
-    if (currentCamera.hasOwnProperty('DeviceName') && currentCamera.DeviceName === camera.Name) {
+    if (receivedAlramFrom)
+      border = 'red'
+    else if (currentCamera.hasOwnProperty('DeviceName') && currentCamera.DeviceName === camera.Name) {
       border = 'green'
     } else if (isPlayBack) {
       border = 'green'
     }
     let cornerImage = ''
     let className = 'h7 camera-name'
-    if (border === 'blue') {
+    if (border === 'red') {
+      cornerImage = 'resources/images/background/red-corner.png'
+      className += ' red'
+    } else if (border === 'blue') {
       cornerImage = 'resources/images/background/blue-corner.png'
       className += ' blue'
     } else if (border === 'green') {
@@ -299,7 +304,7 @@ class CameraView extends React.Component {
         </div>
         <img src={cornerImage} className="cornerImage" alt="corner" />
         <div className={className}>{camera.Name}</div>
-        <button className={cameraType} onClick={this.controlDisplay} />
+        {/* <button className={cameraType} onClick={this.controlDisplay} /> */}
         <CameraControls
           isPlayBack={isPlayBack}
           isPtz={cameraType === 'camera-ptz'}
