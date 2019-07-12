@@ -41,7 +41,8 @@ const mapStateToProps = (state, props) => ({
   accessInfo: state.accessInfo,
   eventInfo: state.eventInfo,
   logInfo: state.logInfo,
-  cameraEventViewInfo: state.cameraEventViewInfo
+  cameraEventViewInfo: state.cameraEventViewInfo,
+  numberkey: state.numberkey
 })
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
@@ -295,6 +296,8 @@ class DashboardAlpha extends React.PureComponent {
   }
 
   createElement = el => {
+    let { numberkey } = this.props
+    let { alarmMessages } = numberkey
     let playbackCamera = this.props.urls.playbackCamera
     let playbackClassName = 'DataCard bg-transparent'
     if (typeof playbackCamera !== 'undefined' && playbackCamera.hasOwnProperty('Id')) {
@@ -318,6 +321,15 @@ class DashboardAlpha extends React.PureComponent {
         let camera = cameras.find(camera => {
           return camera.Id === cameraId
         })
+
+        var receivedAlramFrom = false;
+        alarmMessages.forEach(e => {
+          if (e.DeviceName == camera.Name) receivedAlramFrom = true
+        })
+        if (receivedAlramFrom) {         
+            className += ' red'
+        }
+      
         return (
           <div className={className} key={id} data-grid={el}>
             <ReactSwipeEvents
@@ -330,7 +342,7 @@ class DashboardAlpha extends React.PureComponent {
                 }
               }}
             >
-              <CameraView camera={camera} isPlayBack={isPlayback} />
+              <CameraView camera={camera} isPlayBack={isPlayback} receivedAlramFrom={receivedAlramFrom}/>
               <button className={'closeButton'} onClick={this.onRemoveItem.bind(this, id)} />
             </ReactSwipeEvents>
           </div>
