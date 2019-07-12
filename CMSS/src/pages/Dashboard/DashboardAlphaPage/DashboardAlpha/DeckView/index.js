@@ -293,10 +293,12 @@ class DeckView extends React.PureComponent {
             status_type_id = 2
           }
           switch (EquipmentTypeID) {
-            case 2: {
+            case 2: {//is camera
               let currentCamera = this.props.devices.currentCamera
               let playbackCamera = this.props.urls.playbackCamera
-              let isSelected = false
+              let isSelected = false   
+              let isRaise = device &&  device.status && device.status.includes('Raise')
+              
               if (
                 typeof currentCamera !== 'undefined' &&
                 currentCamera.hasOwnProperty('DeviceName')
@@ -317,6 +319,8 @@ class DeckView extends React.PureComponent {
                 case 2: {
                   if (isSelected) {
                     buttonImage = 'resources/images/decks/cameras/2/cameraFixedGreen.png'
+                  } else if(isRaise) {
+                    buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Up Icon.svg'
                   } else {
                     buttonImage = 'resources/images/decks/cameras/2/cameraFixedBlue.png'
                   }
@@ -359,7 +363,7 @@ class DeckView extends React.PureComponent {
               }
               break
             }
-            case 3: {
+            case 3: {//access control
               if (typeof currentDeck === 'undefined' || !currentDeck.hasOwnProperty('DeckName'))
                 return
               //console.log("currentDeck: ", current);
@@ -381,7 +385,7 @@ class DeckView extends React.PureComponent {
             case 4: {
               break
             }
-            case 5: {
+            case 5: { //deck sensor
               accessInfo = device
               accessInfo.left = left
               accessInfo.top = top
