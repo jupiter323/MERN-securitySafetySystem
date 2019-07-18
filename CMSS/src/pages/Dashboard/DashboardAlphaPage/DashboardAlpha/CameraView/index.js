@@ -274,7 +274,7 @@ class CameraView extends React.Component {
       this.switchToLive()
     }
     let { border, display } = this.state
-    let src = urls.imageURLs[camera.Id] || ''
+    let src = urls.imageURLs[camera.Id] || ''  
     if (receivedAlramFrom)
       border = 'red'
     else if (currentCamera.hasOwnProperty('DeviceName') && currentCamera.DeviceName === camera.Name) {

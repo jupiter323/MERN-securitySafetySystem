@@ -296,9 +296,10 @@ class DeckView extends React.PureComponent {
             case 2: {//is camera
               let currentCamera = this.props.devices.currentCamera
               let playbackCamera = this.props.urls.playbackCamera
-              let isSelected = false   
-              let isRaise = device &&  device.status && device.status.includes('Raise')
-              
+              let isSelected = false
+              let isRaised = device && device.status && device.status.includes('Raise')
+              let isLowered = device && device.status && device.status.includes('Lower')
+              let isViewing = urls.imageURLs[EquipmentSubTypeID]
               if (
                 typeof currentCamera !== 'undefined' &&
                 currentCamera.hasOwnProperty('DeviceName')
@@ -319,8 +320,10 @@ class DeckView extends React.PureComponent {
                 case 2: {
                   if (isSelected) {
                     buttonImage = 'resources/images/decks/cameras/2/cameraFixedGreen.png'
-                  } else if(isRaise) {
-                    buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Up Icon.svg'
+                  } else if (isRaised) {
+                    buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Up Icon.svg'
+                  } else if (isLowered) {
+                    buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Icon.svg'
                   } else {
                     buttonImage = 'resources/images/decks/cameras/2/cameraFixedBlue.png'
                   }
@@ -329,6 +332,10 @@ class DeckView extends React.PureComponent {
                 case 3: {
                   if (isSelected) {
                     buttonImage = 'resources/images/decks/cameras/2/cameraPTZGreen.png'
+                  } else if (isRaised) {
+                    buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Up Icon.svg'
+                  } else if (isLowered) {
+                    buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Icon.svg'
                   } else {
                     buttonImage = 'resources/images/decks/cameras/2/cameraPTZBlue.png'
                   }
@@ -337,6 +344,10 @@ class DeckView extends React.PureComponent {
                 case 4: {
                   if (isSelected) {
                     buttonImage = 'resources/images/decks/cameras/2/camera360Green.png'
+                  } else if (isRaised) {
+                    buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Up Icon.svg'
+                  } else if (isLowered) {
+                    buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Icon.svg'
                   } else {
                     buttonImage = 'resources/images/decks/cameras/2/camera360Blue.png'
                   }
@@ -393,9 +404,15 @@ class DeckView extends React.PureComponent {
               break
             }
           }
-          var receivedAlramFrom = false;
+          let receivedAlramFrom = false;
+          let receivedMotionDetection = false;
+          let receivedLowerdOk = false;
+          let receivedRaisedOk = false;
           alarmMessages.forEach(e => {
             if (e.DeviceName == DeviceName) receivedAlramFrom = true
+            if (e.DeviceName == DeviceName && e.msg == "Motion Detected") receivedMotionDetection = true
+            if (e.DeviceName == DeviceName && e.msg == "Lower OK") receivedLowerdOk = true
+            if (e.DeviceName == DeviceName && e.msg == "Raise OK") receivedRaisedOk = true
           })
 
           return (
@@ -405,9 +422,11 @@ class DeckView extends React.PureComponent {
                 style={{ left: left + '%', top: top + '%' }}
                 onClick={this.onDeviceClick.bind(this, accessInfo)}
               >
-                {EquipmentTypeID == 2 && receivedAlramFrom && <div className={'deviceButtonImage camera-icon-active'}>
+                {EquipmentTypeID == 2 && receivedMotionDetection && <div className={'deviceButtonImage camera-icon-active'}>
                 </div>}
-                {!receivedAlramFrom && <img src={buttonImage} className={'deviceButtonImage'} />}
+                {EquipmentTypeID == 2 && receivedLowerdOk && <img src={"resources/images/decks/cameras/2/Fixed Cam Right-Icon.svg"} className={'deviceButtonImage'} />}
+                {EquipmentTypeID == 2 && receivedRaisedOk && <img src={"resources/images/decks/cameras/2/Fixed Cam Right-Up Icon.svg"} className={'deviceButtonImage'} />}
+                {!receivedMotionDetection && !receivedLowerdOk && !receivedRaisedOk && <img src={buttonImage} className={'deviceButtonImage'} />}
               </button>
             </div>
           )

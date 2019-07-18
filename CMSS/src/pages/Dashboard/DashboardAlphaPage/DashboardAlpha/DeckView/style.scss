@@ -239,20 +239,20 @@
         }
     }
 
-    @-webkit-keyframes capulse {
+    @-webkit-keyframes fix_pulse {
         0% {
-          background-image: url("../../../../../assets/img/decks/cameras/2/camera360Red.png");
+          background-image: url("../../../../../assets/img/decks/cameras/2/Fixed Cam Right-Tripped Icon.svg");
           opacity: 1;
         }
 
         50% {
           
-          background-image: url("../../../../../assets/img/decks/cameras/2/camera360Blue.png");
+          background-image: url("../../../../../assets/img/decks/cameras/2/Fixed Cam Right- In Matrix Icon.svg");
           opacity: 1;
         }
 
         100% {
-          background-image: url("../../../../../assets/img/decks/cameras/2/camera360Red.png");
+          background-image: url("../../../../../assets/img/decks/cameras/2/Fixed Cam Right-Tripped Icon.svg");
           opacity: 1;
         }
     }
@@ -261,7 +261,7 @@
         width: 220%;      
         background-repeat: no-repeat;
         background-size: contain;
-        -webkit-animation: capulse 1s infinite linear;
+        -webkit-animation: fix_pulse 1s infinite linear;
     }
 
 }
