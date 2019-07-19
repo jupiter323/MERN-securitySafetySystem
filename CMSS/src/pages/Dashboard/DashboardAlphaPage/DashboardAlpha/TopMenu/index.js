@@ -13,6 +13,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import DropDownNumKeyPad from './DropDownNumKeyPad';
 import _ from "lodash"
+import { getAllDevices } from '../../../../../ducks/devices';
 
 
 let solarisLogo = 'resources/images/logo/4.png'
@@ -356,6 +357,7 @@ class TopMenu extends React.Component {
 
             if (result === 'OK') {
               message.info(`All Camera ${result_array[3].slice(0, -1)} succeed`)
+              getAllDevices(dispatch)
             } else {
               message.info(`All Camera ${result_array[3].slice(0, -1)} faild`)
             }
@@ -375,6 +377,7 @@ class TopMenu extends React.Component {
 
             if (result === 'OK') {
               message.info(`Camera ${result_array[3].slice(0, -1)} succeed`)
+              getAllDevices(dispatch)
             } else {
 
               message.info(`Camera ${result_array[3].slice(0, -1)} faild`)
@@ -394,10 +397,11 @@ class TopMenu extends React.Component {
             if (result === 'OK') {
               let type = result_array[3].slice(0, -1)
               if (type === 'Enable') {
-                message.success('All deck sensors are enabled successfully.')
+                message.success('All deck sensors are enabled successfully.')                
               } else {
                 message.success('All deck sensors are disabled successfully.')
               }
+              getAllDevices(dispatch)
             } else {
               let type = result_array[3].slice(0, -1)
               if (type === 'Enable') {
@@ -426,6 +430,7 @@ class TopMenu extends React.Component {
               } else {
                 message.success('All deck sensors in this deck zone are disabled successfully.')
               }
+              getAllDevices(dispatch)
             } else {
               let type = result_array[5].slice(0, -1)
               if (type === 'Enable') {
