@@ -7,6 +7,7 @@ import rootReducer from 'ducks/redux'
 import './style.scss'
 import { message } from 'antd'
 import cookie from 'react-cookie'
+import { getAllDevices } from '../../../../../../ducks/devices';
 
 let socketUrl = rootReducer.socketUrl
 
@@ -76,6 +77,7 @@ class CameraPopup extends React.Component {
                     : 'lowered' + ' successfully.',
                 )
                 getAllDeviceAttributes(this.props.dispatch)
+                getAllDevices(this.props.dispatch)
 
               } else {
                 let messageTxt = result_array[6].slice(0, -1)
@@ -95,6 +97,7 @@ class CameraPopup extends React.Component {
                     : 'lowered' + ' successfully.',
                 )
                 getAllDeviceAttributes(this.props.dispatch)
+                getAllDevices(this.props.dispatch)
               } else {
                 let messageTxt = result_array[6].slice(0, -1)
                 message.error(messageTxt + '\tInsufficient permission to operate the camera lift.')

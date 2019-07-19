@@ -20,7 +20,7 @@ export default function(state = INITIAL_STATE, action) {
 }
 
 export function getAllDevices(dispatch) {
-  let url = rootReducer.serverUrl + '/api/devices/all'
+  let url = rootReducer.serverUrl + '/api/devices/all'  
   axios.get(url).then(response => {
     let devices = response.data
     dispatch({
