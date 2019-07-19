@@ -296,10 +296,15 @@ class DeckView extends React.PureComponent {
             case 2: {//is camera
               let currentCamera = this.props.devices.currentCamera
               let playbackCamera = this.props.urls.playbackCamera
+              let curCamera = cameras.find(camera => {
+                return camera.Name === DeviceName
+              })
               let isSelected = false
               let isRaised = device && device.status && device.status.includes('Raise')
               let isLowered = device && device.status && device.status.includes('Lower')
-              let isViewing = urls.imageURLs[EquipmentSubTypeID]
+              let isViewing = curCamera ? document.getElementById(curCamera.Id) && document.getElementById(curCamera.Id).src.includes("blob") : false
+              let isLiftCam = device && device.EquipmentSubTypeID === 2 && device.AuxDeviceID > 1 ? true : false
+
               if (
                 typeof currentCamera !== 'undefined' &&
                 currentCamera.hasOwnProperty('DeviceName')
@@ -318,38 +323,68 @@ class DeckView extends React.PureComponent {
 
               switch (EquipmentSubTypeID) {
                 case 2: {
-                  if (isSelected) {
-                    buttonImage = 'resources/images/decks/cameras/2/cameraFixedGreen.png'
-                  } else if (isRaised) {
-                    buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Up Icon.svg'
-                  } else if (isLowered) {
-                    buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Icon.svg'
+                  if (isLiftCam) {
+                    if (isLowered && isViewing && isSelected) {
+                      buttonImage = 'resources/images/decks/cameras/2/cameraFixedGreen.png'
+                    } else if (isRaised) {
+                      buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Up Icon.svg' //grey
+                    } else if (!isViewing) {// need lowered
+                      buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Icon.svg' //magenta
+                    } else if (isViewing) {// need lowered
+                      buttonImage = 'resources/images/decks/cameras/2/cameraFixedBlue.png'
+                    }
                   } else {
-                    buttonImage = 'resources/images/decks/cameras/2/cameraFixedBlue.png'
+                    if (isViewing && isSelected) {
+                      buttonImage = 'resources/images/decks/cameras/2/cameraFixedGreen.png'
+                    } else if (!isViewing) {
+                      buttonImage = 'resources/images/decks/cameras/2/Fixed Cam Right-Icon.svg' //magenta
+                    } else if (isViewing) {
+                      buttonImage = 'resources/images/decks/cameras/2/cameraFixedBlue.png'
+                    }
                   }
                   break
                 }
                 case 3: {
-                  if (isSelected) {
-                    buttonImage = 'resources/images/decks/cameras/2/cameraPTZGreen.png'
-                  } else if (isRaised) {
-                    buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Up Icon.svg'
-                  } else if (isLowered) {
-                    buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Icon.svg'
+                  if (isLiftCam) {
+                    if (isLowered && isViewing && isSelected) {
+                      buttonImage = 'resources/images/decks/cameras/2/cameraPTZGreen.png'
+                    } else if (isRaised) {
+                      buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Up Icon.svg' //grey
+                    } else if (!isViewing) {// need lowered
+                      buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Icon.svg' //magenta
+                    } else if (isViewing) {// need lowered
+                      buttonImage = 'resources/images/decks/cameras/2/cameraPTZBlue.png'
+                    }
                   } else {
-                    buttonImage = 'resources/images/decks/cameras/2/cameraPTZBlue.png'
+                    if (isViewing && isSelected) {
+                      buttonImage = 'resources/images/decks/cameras/2/cameraPTZGreen.png'
+                    } else if (!isViewing) {
+                      buttonImage = 'resources/images/decks/cameras/2/PTZ Cam Right-Icon.svg' //magenta
+                    } else if (isViewing) {
+                      buttonImage = 'resources/images/decks/cameras/2/cameraPTZBlue.png'
+                    }
                   }
                   break
                 }
                 case 4: {
-                  if (isSelected) {
-                    buttonImage = 'resources/images/decks/cameras/2/camera360Green.png'
-                  } else if (isRaised) {
-                    buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Up Icon.svg'
-                  } else if (isLowered) {
-                    buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Icon.svg'
+                  if (isLiftCam) {
+                    if (isLowered && isViewing && isSelected) {
+                      buttonImage = 'resources/images/decks/cameras/2/camera360Green.png'
+                    } else if (isRaised) {
+                      buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Up Icon.svg' //grey
+                    } else if (!isViewing) {// need lowered
+                      buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Icon.svg' //magenta
+                    } else if (isViewing) {// need lowered
+                      buttonImage = 'resources/images/decks/cameras/2/camera360Blue.png'
+                    }
                   } else {
-                    buttonImage = 'resources/images/decks/cameras/2/camera360Blue.png'
+                    if (isViewing && isSelected) {
+                      buttonImage = 'resources/images/decks/cameras/2/camera360Green.png'
+                    } else if (!isViewing) {
+                      buttonImage = 'resources/images/decks/cameras/2/360 Cam Right-Icon.svg' //magenta
+                    } else if (isViewing) {
+                      buttonImage = 'resources/images/decks/cameras/2/camera360Blue.png'
+                    }
                   }
                   break
                 }
@@ -357,10 +392,7 @@ class DeckView extends React.PureComponent {
               accessInfo = device
               accessInfo.left = left
               accessInfo.top = top
-              let cameraName = device.DeviceName
-              let curCamera = cameras.find(camera => {
-                return camera.Name === cameraName
-              })
+
               if (typeof curCamera !== 'undefined') {
                 accessInfo.camera = curCamera
                 let cameraId = curCamera.Id
@@ -396,23 +428,29 @@ class DeckView extends React.PureComponent {
             case 4: {
               break
             }
-            case 5: { //deck sensor
+            case 5: { //deck sensor              
               accessInfo = device
               accessInfo.left = left
               accessInfo.top = top
-              buttonImage = 'resources/images/decks/deckSensorGreen.png'
+              let isOff = device && device.status && device.status.includes('Disable')
+              let isOn = device && device.status && device.status.includes('Enable')
+              if (isOn) {
+                buttonImage = 'resources/images/decks/deckSensorGreen.png'
+              } else if (isOff) {
+                buttonImage = 'resources/images/decks/deckSensorGrey.png'
+              } else {
+                buttonImage = 'resources/images/decks/deckSensorRed.png'
+              }
+
               break
             }
           }
           let receivedAlramFrom = false;
-          let receivedMotionDetection = false;
-          let receivedLowerdOk = false;
-          let receivedRaisedOk = false;
+          let receivedMotionDetection = false;    
           alarmMessages.forEach(e => {
             if (e.DeviceName == DeviceName) receivedAlramFrom = true
             if (e.DeviceName == DeviceName && e.msg == "Motion Detected") receivedMotionDetection = true
-            if (e.DeviceName == DeviceName && e.msg == "Lower OK") receivedLowerdOk = true
-            if (e.DeviceName == DeviceName && e.msg == "Raise OK") receivedRaisedOk = true
+
           })
 
           return (
@@ -424,9 +462,7 @@ class DeckView extends React.PureComponent {
               >
                 {EquipmentTypeID == 2 && receivedMotionDetection && <div className={'deviceButtonImage camera-icon-active'}>
                 </div>}
-                {EquipmentTypeID == 2 && receivedLowerdOk && <img src={"resources/images/decks/cameras/2/Fixed Cam Right-Icon.svg"} className={'deviceButtonImage'} />}
-                {EquipmentTypeID == 2 && receivedRaisedOk && <img src={"resources/images/decks/cameras/2/Fixed Cam Right-Up Icon.svg"} className={'deviceButtonImage'} />}
-                {!receivedMotionDetection && !receivedLowerdOk && !receivedRaisedOk && <img src={buttonImage} className={'deviceButtonImage'} />}
+                {!receivedMotionDetection && <img src={buttonImage} className={'deviceButtonImage'} />}
               </button>
             </div>
           )
