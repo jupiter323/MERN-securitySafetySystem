@@ -11,6 +11,7 @@ import { message } from 'antd'
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import _ from "lodash"
+import { getAllDevices } from '../../../../../../ducks/devices';
 
 const getDeckZoneSensor = (deckNum) => gql`
   query getDeckZoneSensor {
@@ -94,10 +95,11 @@ class DeckSensorPopup extends React.Component {
             if (result === 'OK') {
               let type = result_array[3].slice(0, -1)
               if (type === 'Enable') {
-                message.success('All deck sensors are enabled successfully.')
+                message.success('All deck sensors are enabled successfully.')               
               } else {
-                message.success('All deck sensors are disabled successfully.')
+                message.success('All deck sensors are disabled successfully.')               
               }
+              getAllDevices(dispatch)
             } else {
               let type = result_array[3].slice(0, -1)
               if (type === 'Enable') {
@@ -126,6 +128,7 @@ class DeckSensorPopup extends React.Component {
               } else {
                 message.success('All deck sensors in this deck zone are disabled successfully.')
               }
+              getAllDevices(dispatch)
             } else {
               let type = result_array[5].slice(0, -1)
               if (type === 'Enable') {
