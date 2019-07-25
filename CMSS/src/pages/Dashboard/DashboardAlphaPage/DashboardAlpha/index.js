@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import ReactDom from 'react-dom'
 import SplashScreen from './SplashScreen/index'
 import { message } from 'antd'
-
+import cookie from 'react-cookie'
 import _ from 'lodash'
 
 import TopMenu from './TopMenu/index'
@@ -77,6 +77,10 @@ class DashboardAlpha extends React.PureComponent {
   }
 
   componentWillMount() {
+    var username = cookie.load('UserName');
+    var themeLayout =  localStorage.getItem(`${username}.themeLayout`)
+    var loginItems = themeLayout && JSON.parse(themeLayout)
+    console.log(loginItems)
     //requestAllStreams(this.state.cameras);
     let { dispatch, widgetInfo, urls } = this.props
     connectToMilestone(
@@ -112,53 +116,56 @@ class DashboardAlpha extends React.PureComponent {
           cameraViews: cameraViews,
         })
         let items = []
-        const camera_count = cameras.length
-        const cols = 4
-        const w = 3
-        const h = 2
-        if (camera_count > 0) {
-          for (let i = 0; i < camera_count; i++) {
-            items.push({
-              i: 'cameraView-' + cameras[i].Id,
-              x: (cols - (i % cols) - 1) * w,
-              y: Math.floor(i / cols) * h,
-              w: w,
-              h: h,
-            })
+        if (loginItems) items = loginItems;
+        else {
+          const camera_count = cameras.length
+          const cols = 4
+          const w = 3
+          const h = 2
+          if (camera_count > 0) {
+            for (let i = 0; i < camera_count; i++) {
+              items.push({
+                i: 'cameraView-' + cameras[i].Id,
+                x: (cols - (i % cols) - 1) * w,
+                y: Math.floor(i / cols) * h,
+                w: w,
+                h: h,
+              })
+            }
           }
+          // add sensor view
+          // items.push({
+          //   i: 'sensorView',
+          //   x: cols * w,
+          //   y: 0,
+          //   w: 3,
+          //   h: 4,
+          //   draggable: true,
+          // })
+          items.push({
+            i: 'playbackView',
+            x: cols * w,
+            y: 4,
+            w: 3,
+            h: 4,
+          })
+          items.push({
+            i: 'deckView',
+            x: 0,
+            y: Math.ceil(camera_count / 3) * h,
+            w: 8,
+            h: 3,
+          })
+          items.push({
+            i: 'eventView',
+            x: 8,
+            y: Math.ceil(camera_count / 3) * h,
+            w: 4,
+            h: 3,
+            minW: 4,
+            minH: 3,
+          })
         }
-        // add sensor view
-        // items.push({
-        //   i: 'sensorView',
-        //   x: cols * w,
-        //   y: 0,
-        //   w: 3,
-        //   h: 4,
-        //   draggable: true,
-        // })
-        items.push({
-          i: 'playbackView',
-          x: cols * w,
-          y: 4,
-          w: 3,
-          h: 4,
-        })
-        items.push({
-          i: 'deckView',
-          x: 0,
-          y: Math.ceil(camera_count / 3) * h,
-          w: 8,
-          h: 3,
-        })
-        items.push({
-          i: 'eventView',
-          x: 8,
-          y: Math.ceil(camera_count / 3) * h,
-          w: 4,
-          h: 3,
-          minW: 4,
-          minH: 3,
-        })
         this.setState({
           items: items,
           display: true,
@@ -326,10 +333,10 @@ class DashboardAlpha extends React.PureComponent {
         alarmMessages.forEach(e => {
           if (e.DeviceName == camera.Name) receivedAlramFrom = true
         })
-        if (receivedAlramFrom) {         
-            className += ' red'
+        if (receivedAlramFrom) {
+          className += ' red'
         }
-      
+
         return (
           <div className={className} key={id} data-grid={el}>
             <ReactSwipeEvents
@@ -342,7 +349,7 @@ class DashboardAlpha extends React.PureComponent {
                 }
               }}
             >
-              <CameraView camera={camera} isPlayBack={isPlayback} receivedAlramFrom={receivedAlramFrom}/>
+              <CameraView camera={camera} isPlayBack={isPlayback} receivedAlramFrom={receivedAlramFrom} />
               <button className={'closeButton'} onClick={this.onRemoveItem.bind(this, id)} />
             </ReactSwipeEvents>
           </div>
@@ -443,8 +450,10 @@ class DashboardAlpha extends React.PureComponent {
   }
 
   onLayoutChange = layout => {
-    //this.props.onLayoutChange(layout);
+    var username = cookie.load('UserName');
     this.setState({ layout: layout })
+    console.log(username)
+    localStorage.setItem(`${username}.themeLayout`, JSON.stringify(layout))
     console.log('OnLayoutChange: ', this.state.layout)
   }
 
