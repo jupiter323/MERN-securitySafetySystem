@@ -85,6 +85,7 @@
     overflow: hidden;
   }
   .CameraView {
+    object-fit: cover;
     border: none;
     position: absolute;
     -webkit-user-drag: none;
