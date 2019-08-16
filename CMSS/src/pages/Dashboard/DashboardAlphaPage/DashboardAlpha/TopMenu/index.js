@@ -1220,7 +1220,7 @@ function DropDownCameras(props) {
                   className += ' shown'
                 }
                 return (
-                  <li onClick={onCameraSelect.bind(this, cameraId, visible)}>
+                  <li key={camera.DeviceName} onClick={onCameraSelect.bind(this, cameraId, visible)}>
                     <div className={className}>
                       <img
                         className="liItemImage"
