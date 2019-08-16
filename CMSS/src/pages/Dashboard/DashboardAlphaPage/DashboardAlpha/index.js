@@ -78,46 +78,105 @@ class DashboardAlpha extends React.PureComponent {
 
   componentWillMount() {
     var username = cookie.load('UserName');
-    var themeLayout =  localStorage.getItem(`${username}.themeLayout`)
+    var themeLayout = localStorage.getItem(`${username}.themeLayout`)
     var loginItems = themeLayout && JSON.parse(themeLayout)
+    // loginItems = undefined
     console.log(loginItems)
     //requestAllStreams(this.state.cameras);
     let { dispatch, widgetInfo, urls } = this.props
     connectToMilestone(
       dispatch,
       () => {
-        let cameras = urls.cameras
-        dispatch({
-          type: 'SET_PLAYBACK_VIEW',
-          playbackView: { visible: true },
-        })
-        dispatch({
-          type: 'SET_DECK_VIEW',
-          deckView: { visible: true },
-        })
-        // dispatch({
-        //   type: 'SET_SENSOR_VIEW',
-        //   sensorView: { visible: true },
-        // })
-        dispatch({
-          type: 'SET_EVENT_VIEW',
-          eventView: { visible: true },
-        })
-
-        let cameraViews = []
-        cameras.map(camera => {
-          cameraViews.push({
-            id: camera.Id,
-            visible: true,
+        if (loginItems) { // login theme layout
+          let cameras = urls.cameras
+          let cameraViews = []
+          loginItems.forEach(e => {
+            let id = e.i
+            switch (id) {
+              case "playbackView":
+                dispatch({
+                  type: 'SET_PLAYBACK_VIEW',
+                  playbackView: { visible: true },
+                })
+                break;
+              case "deckView":
+                dispatch({
+                  type: 'SET_DECK_VIEW',
+                  deckView: { visible: true },
+                })
+                break;
+              case "eventView":
+                dispatch({
+                  type: 'SET_EVENT_VIEW',
+                  eventView: { visible: true },
+                })
+                break;
+              case "sensorView":
+                dispatch({
+                  type: 'SET_SENSOR_VIEW',
+                  sensorView: { visible: true },
+                })
+                break;
+              default: //is camera
+                cameraViews.push({
+                  id: id.replace('cameraView-', ''),
+                  visible: true,
+                })
+                break;
+            }
+          });
+          cameras.forEach(e => {
+            var isInclude = cameraViews.filter(ee => e.Id == ee.id)
+            if (!isInclude.length){
+              cameraViews.push(
+                {
+                  id: e.Id,
+                  visible: false
+                }
+              )
+            }
           })
-        })
-        dispatch({
-          type: 'SET_CAMERA_VIEWS',
-          cameraViews: cameraViews,
-        })
-        let items = []
-        if (loginItems) items = loginItems;
-        else {
+          dispatch({
+            type: 'SET_CAMERA_VIEWS',
+            cameraViews: cameraViews,
+          })
+
+          this.setState({
+            items: loginItems,
+            display: true,
+          })
+        } else { // from mileston when first login
+          let cameras = urls.cameras
+          dispatch({
+            type: 'SET_PLAYBACK_VIEW',
+            playbackView: { visible: true },
+          })
+          dispatch({
+            type: 'SET_DECK_VIEW',
+            deckView: { visible: true },
+          })
+          // dispatch({
+          //   type: 'SET_SENSOR_VIEW',
+          //   sensorView: { visible: true },
+          // })
+          dispatch({
+            type: 'SET_EVENT_VIEW',
+            eventView: { visible: true },
+          })
+
+          let cameraViews = []
+          cameras.map(camera => {
+            cameraViews.push({
+              id: camera.Id,
+              visible: true,
+            })
+          })
+          dispatch({
+            type: 'SET_CAMERA_VIEWS',
+            cameraViews: cameraViews,
+          })
+          let items = []
+
           const camera_count = cameras.length
           const cols = 4
           const w = 3
@@ -165,11 +224,11 @@ class DashboardAlpha extends React.PureComponent {
             minW: 4,
             minH: 3,
           })
+          this.setState({
+            items: items,
+            display: true,
+          })
         }
-        this.setState({
-          items: items,
-          display: true,
-        })
       },
       () => {
         console.log('Failed to connect milestone server')
