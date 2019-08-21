@@ -41,7 +41,9 @@ class DeckView extends React.PureComponent {
       left: 0,
       top: 0,
     },
-    deckSensorPopupInfo: {},
+    deckSensorPopupInfo: {
+      enabled: false
+    },
   }
 
   componentDidMount = () => {
@@ -149,7 +151,9 @@ class DeckView extends React.PureComponent {
             left: accessInfo.left,
             top: accessInfo.top,
           },
-          deckSensorPopupInfo: {},
+          deckSensorPopupInfo: {
+            enabled: accessInfo.enabled
+          },
         })
         this.setState({
           cameraPopupDisplay: {
@@ -434,6 +438,7 @@ class DeckView extends React.PureComponent {
               accessInfo.top = top
               let isOff = device && device.status && device.status.includes('Disable')
               let isOn = device && device.status && device.status.includes('Enable')
+              accessInfo.enabled = isOn
               if (isOn) {
                 buttonImage = 'resources/images/decks/deckSensorGreen.png'
               } else if (isOff) {
@@ -446,7 +451,7 @@ class DeckView extends React.PureComponent {
             }
           }
           let receivedAlramFrom = false;
-          let receivedMotionDetection = false;    
+          let receivedMotionDetection = false;
           alarmMessages.forEach(e => {
             if (e.DeviceName == DeviceName) receivedAlramFrom = true
             if (e.DeviceName == DeviceName && e.msg == "Motion Detected") receivedMotionDetection = true
