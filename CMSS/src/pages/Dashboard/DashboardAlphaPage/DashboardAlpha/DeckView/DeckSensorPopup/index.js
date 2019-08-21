@@ -95,9 +95,9 @@ class DeckSensorPopup extends React.Component {
             if (result === 'OK') {
               let type = result_array[3].slice(0, -1)
               if (type === 'Enable') {
-                message.success('All deck sensors are enabled successfully.')               
+                message.success('All deck sensors are enabled successfully.')
               } else {
-                message.success('All deck sensors are disabled successfully.')               
+                message.success('All deck sensors are disabled successfully.')
               }
               getAllDevices(dispatch)
             } else {
@@ -111,15 +111,15 @@ class DeckSensorPopup extends React.Component {
             break
           }
           case 'DeckSensorZoneEnable': {
-             // number keyoad alarm
-             var alarmMessage = { 'DateTime': new Date(), 'DeviceName': result_array[3].slice(0, -1), 'msg': `Sensor ${result_array[4].slice(0, -1)} ${result_array[5].slice(0, -1)}` }
-             let { dispatch } = this.props
-             dispatch({
-               type: 'ADD_Alarm_message',
-               alarmMessage,
-             })
+            // number keyoad alarm
+            var alarmMessage = { 'DateTime': new Date(), 'DeviceName': result_array[3].slice(0, -1), 'msg': `Sensor ${result_array[4].slice(0, -1)} ${result_array[5].slice(0, -1)}` }
+            let { dispatch } = this.props
+            dispatch({
+              type: 'ADD_Alarm_message',
+              alarmMessage,
+            })
 
-             
+
             let result = result_array[6].slice(0, -1)
             if (result === 'OK') {
               let type = result_array[5].slice(0, -1)
@@ -228,7 +228,7 @@ class DeckSensorPopup extends React.Component {
 
 
   render() {
-    let { displayInfo, deckZonesInfo, currentDeck } = this.props
+    let { displayInfo, deckZonesInfo, currentDeck, info } = this.props
     let { display, left, top } = displayInfo
     let { expandedList } = this.state
     let curDeckNumber = currentDeck.DeckNumber
@@ -249,6 +249,9 @@ class DeckSensorPopup extends React.Component {
       >
         <div className={'caption'}>DECK SENSORS</div>
         <ul className="popupArea">
+          <li>
+            <div className="dropdownItem"><span className={'subTitle'}>{info.enabled?"Enabled":"Desabled"}</span></div>
+          </li>
           <li>
             <div className="dropdownItem" onClick={this.dropDownItemClick.bind(this, 0)}>
               <i
